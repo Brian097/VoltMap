@@ -1,4 +1,3 @@
-const OCM_API_KEY = "";
 const latInicial = -34.4811;
 const lngInicial = -54.3333;
 
@@ -10,9 +9,10 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 async function obtenerCargadores() {
-    const url = `https://api.openchargemap.io/v3/poi?output=json&countrycode=UY&maxresults=700&key=${OCM_API_KEY}`;
+    // Utiliza la clave inyectada desde PHP de forma segura
+    const apiKey = typeof OCM_API_KEY !== 'undefined' ? OCM_API_KEY : '';
+    const url = `https://api.openchargemap.io/v3/poi?output=json&countrycode=UY&maxresults=700&key=${apiKey}`;
     
-
     try {
         const response = await fetch(url);
         const data = await response.json();

@@ -1,3 +1,14 @@
+<?php
+    // 1. Cargamos la configuración global (esto ejecuta tu función cargarEnv automáticamente)
+    require_once __DIR__ . '/../../../config/config.php';
+    
+    // 2. Verificamos la autenticación
+    require_once __DIR__ . "/../../view/inc/auth.php";
+
+    // 3. Obtenemos la clave ya disponible en $_ENV
+    $ocmApiKey = $_ENV['OCM_API_KEY'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -12,10 +23,6 @@
 </head>
 
 <body>
-<?php
-  require_once __DIR__ . "/../../view/inc/auth.php";
-?>
-
 <!-- Mapa principal -->
   <div class="sc on" id="s-mapa">
     <!-- Barra superior de búsqueda -->
@@ -111,6 +118,11 @@
     </div>
   </div>
 
+<!-- Inyectamos la API Key leída por tu config.php -->
+  <script>
+      const OCM_API_KEY = "<?php echo htmlspecialchars($ocmApiKey, ENT_QUOTES, 'UTF-8'); ?>";
+  </script>
+
   <!-- Librería de Leaflet -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -119,8 +131,9 @@
 
   <!-- Interacción de la interfaz (chips, menú, etc.) -->
   <script src="/voltmap/app/view/js/script.js"></script>
+</body>
+</html>
 
-  
 
 </body>
 
