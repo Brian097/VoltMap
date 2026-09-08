@@ -1,0 +1,143 @@
+:root {
+  --azul: #1B3A6B;
+  --azul2: #1D4ED8;
+  --verde: #16A34A;
+  --fondo: #F1F5F9;
+  --blanco: #FFFFFF;
+  --borde: #CBD5E1;
+  --txt: #0F172A;
+  --sub: #64748B;
+  --sh2: 0 4px 18px rgba(0, 0, 0, .14);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, Arial, sans-serif;
+  color: var(--txt);
+  background: var(--fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-azul {
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  display: block;
+  width: 100%;
+}
+
+.btn-out {
+  background: transparent;
+  color: var(--azul);
+  border: 2px solid var(--azul);
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.campo {
+  margin-bottom: 14px;
+}
+
+.campo label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sub);
+  margin-bottom: 4px;
+}
+
+.campo input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--txt);
+  background: #fff;
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: var(--azul2);
+}
+
+.campo input::placeholder {
+  color: #94a3b8;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 32px;
+  width: 380px;
+  box-shadow: var(--sh2);
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  justify-content: center;
+}
+
+.login-logo img {
+  height: 44px;
+}
+
+.card-titulo {
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.card-sub {
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 20px;
+}
+
+.link-row {
+  font-size: 13px;
+  color: var(--sub);
+  text-align: center;
+  margin-top: 14px;
+}
+
+.link-row a {
+  color: var(--azul2);
+  font-weight: 700;
+}
+
+.iconos-login {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid var(--borde);
+}
