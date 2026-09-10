@@ -1,5 +1,7 @@
 <?php
-    function cargarEnv($ruta) {
+// /www/wwwroot/voltmap.duckdns.org/utils/cargar_env.php
+
+function cargarEnv($ruta) {
     if (!file_exists($ruta)) {
         return false;
     }
@@ -19,15 +21,9 @@
         $valor = trim($valor);
 
         // Guardar en las variables de entorno de PHP
-        putenv("$clave=$valor");
+        //putenv("$clave=$valor");
         $_ENV[$clave] = $valor;
         $_SERVER[$clave] = $valor;
     }
     return true;
 }
-
-// Llamar a la función apuntando a la raíz
-cargarEnv(__DIR__ . '/../.env');
-
-
-?>

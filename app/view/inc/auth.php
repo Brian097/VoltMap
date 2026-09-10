@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (empty($_SESSION["id"])) {
-    header("Location: /voltmap/app/view/content/login.php");
+    header("Location: /app/view/content/login.php");
     exit();
 }
 ?>

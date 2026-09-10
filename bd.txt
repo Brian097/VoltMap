@@ -1,0 +1,28 @@
+CREATE DATABASE IF NOT EXISTS voltmap CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE voltmap;
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_usuario ENUM('part', 'emp') NOT NULL DEFAULT 'part',
+    nombre VARCHAR(100) NOT NULL,
+    cedula VARCHAR(20) DEFAULT NULL,
+    rut VARCHAR(20) DEFAULT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_usuario ENUM('particular', 'empresa', 'moderador', 'administrador') NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    seudonimo VARCHAR(50) DEFAULT NULL,
+    foto_perfil VARCHAR(255) DEFAULT NULL,
+    estado VARCHAR(50) DEFAULT 'activo',
+    cedula_identidad VARCHAR(20) DEFAULT NULL,
+    foto_cedula VARCHAR(255) DEFAULT NULL,
+    rut VARCHAR(30) DEFAULT NULL
+);

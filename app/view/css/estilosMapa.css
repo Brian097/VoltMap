@@ -393,4 +393,8 @@ img {
   .leyenda-mapa {
     bottom: 70px; 
   }
+  .bottom-nav {
+    position: fixed;
+    bottom: 0px;
+  }
 }

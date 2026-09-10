@@ -5,6 +5,6 @@ session_unset();
 
 session_destroy();
 
-header("Location: /voltmap/app/view/content/login.php");
+header("Location: /app/view/content/login.php");
 exit();
 ?>

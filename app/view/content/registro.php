@@ -9,14 +9,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $lang['crear_cuenta']; ?> - VoltMap</title>
-    <link rel="stylesheet" href="/voltmap/app/view/css/estilosRegistro.css">
+    <link rel="stylesheet" href="../css/estilosRegistro.css">
 </head>
 <body>
 
 <div class="sc on" id="s-registro" style="align-items:center;justify-content:center;overflow-y:auto;background:var(--fondo)">
     <div class="reg-card">
       <div class="login-logo">
-        <img src="/voltmap/app/view/img/VoltMap-3.png" alt="Logo de la app">
+        <img src="../img/VoltMap-3.png" alt="Logo de la app">
       </div>
       <h2 class="card-titulo"><?php echo $lang['crear_cuenta']; ?></h2>
       <p class="card-sub"><?php echo $lang['sub_registro']; ?></p>

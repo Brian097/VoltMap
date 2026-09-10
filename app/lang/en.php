@@ -20,5 +20,21 @@ $lang = [
     'terminos' => 'I accept the terms and conditions',
     'btn_registrar' => 'Sign up',
     'ya_cuenta' => 'Already have an account?',
-    'iniciar_sesion' => 'Log in'
+    'iniciar_sesion' => 'Log in',
+    // Perfil
+    'mi_perfil' => 'My Profile',
+    'sub_perfil' => 'Manage your personal information and credentials',
+    'volver_mapa' => 'Back to Map',
+    'info_personal' => 'Personal Information',
+    'nombre_lbl' => 'Name',
+    'seudonimo_lbl' => 'Pseudonym',
+    'correo_lbl' => 'Email',
+    'cedula_rut_lbl' => 'ID / RUT',
+    'cambiar_pass' => 'Change Password (Optional)',
+    'nueva_pass_lbl' => 'New Password',
+    'confirmar_pass_lbl' => 'Confirm Password',
+    'btn_guardar' => 'Save Changes',
+    'pass_no_coinciden' => 'New passwords do not match.',
+    'perfil_actualizado_exito' => 'Profile updated successfully.',
+    'nombre_correo_obligatorios' => 'Name and email are required.'
 ];

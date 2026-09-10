@@ -18,7 +18,7 @@
   <title>VoltMap — Mapa de Cargadores</title>
 
   <!-- Hojas de estilo de la app y Leaflet -->
-  <link rel="stylesheet" href="/voltmap/app/view/css/estilosMapa.css">
+  <link rel="stylesheet" href="../../view/css/estilosMapa.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
@@ -28,7 +28,7 @@
     <!-- Barra superior de búsqueda -->
     <div class="mapa-topbar">
       <div class="mapa-logo">
-        <img src="/voltmap/app/view/img/VoltMap-3.png" alt="Logo de la app">
+        <img src="../../view/img/VoltMap-3.png" alt="Logo de la app">
       </div>
       <input class="search-bar" placeholder="Buscar dirección o lugar...">
       <button class="icon-btn" title="Filtros">
@@ -44,7 +44,7 @@
           <path d="M13.73 21a2 2 0 0 1-3.46 0" />
         </svg>
       </button>
-      <button class="icon-btn" title="Menu" onclick="location.href='/voltmap/app/controller/controlador_cerrar_sesion.php'">
+      <button class="icon-btn" title="Menu" onclick="location.href='/app/controller/controlador_cerrar_sesion.php'">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2">
           <line x1="3" y1="12" x2="21" y2="12" />
           <line x1="3" y1="6" x2="21" y2="6" />
@@ -100,7 +100,7 @@
         </div>
         Publicar
       </button>
-      <button class="bn" onclick="location.href='perfil.php'">
+      <button class="bn" onclick="location.href='/app/view/content/perfil.php'">
         <svg viewBox="0 0 24 24">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
           <circle cx="12" cy="7" r="4" />
@@ -127,14 +127,10 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Lógica para obtener los datos de Open Charge Map -->
-  <script src="/voltmap/app/view/js/openchargemap.js"></script>
+  <script src="/app/view/js/openchargemap.js"></script>
 
   <!-- Interacción de la interfaz (chips, menú, etc.) -->
-  <script src="/voltmap/app/view/js/script.js"></script>
+  <script src="/app/view/js/script.js"></script>
 </body>
 </html>
 
-
-</body>
-
-</html>

@@ -1,35 +1,31 @@
 <?php
-// C:\xampp\htdocs\voltmap\config.php
-
 function cargarEnv() {
-    // Definimos las 3 rutas más posibles donde podría estar el .env
+    // Definimos las rutas posibles dentro de los límites permitidos por el servidor
     $rutasPosibles = [
-        __DIR__ . '/.env',                      // En la misma carpeta que config.php
-        dirname(__DIR__) . '/.env',             // Una carpeta arriba
-        'C:/xampp/htdocs/voltmap/.env'          // Ruta absoluta directa de Windows
+        __DIR__ . '/.env',          // Si config.php está en la raíz
+        dirname(__DIR__) . '/.env', // Si config.php está dentro de una carpeta (ej. /config/)
     ];
 
     $rutaFinal = null;
 
     foreach ($rutasPosibles as $ruta) {
+        // Usamos realpath solo si el archivo existe para evitar avisos
         if (file_exists($ruta)) {
-            $rutaFinal = $ruta;
+            $rutaFinal = realpath($ruta);
             break;
         }
     }
 
-    // Si después de buscar en todas no lo encuentra, te muestra la lista para investigar
     if (!$rutaFinal) {
         echo "<h3>❌ Error Crítico: PHP no puede leer el archivo .env</h3>";
         echo "Buscamos en las siguientes ubicaciones y todas fallaron:<br>";
         foreach ($rutasPosibles as $r) {
-            echo "- " . (file_exists($r) ? "✅ Existe pero sin permisos" : "❌ No existe en: " . $r) . "<br>";
+            echo "- ❌ No existe o está fuera de path: " . htmlspecialchars($r) . "<br>";
         }
         echo "<br><b>Tu directorio actual de ejecución es:</b> " . __DIR__ . "<br>";
         return false;
     }
 
-    // Si lo encuentra, lo procesa
     $contenido = file_get_contents($rutaFinal);
     $lineas = preg_split('/\r\n|\r|\n/', $contenido);
 
@@ -42,7 +38,8 @@ function cargarEnv() {
             $clave = trim($clave);
             $valor = trim($valor, " \t\n\r\0\x0B\"'");
 
-            putenv("$clave=$valor");
+            // ELIMINAMOS putenv() porque está bloqueado en tu servidor.
+            // Usamos únicamente los arrays globales:
             $_ENV[$clave] = $valor;
             $_SERVER[$clave] = $valor;
         }
@@ -50,5 +47,4 @@ function cargarEnv() {
     return true;
 }
 
-// Ejecutar la búsqueda
 cargarEnv();

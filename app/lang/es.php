@@ -20,5 +20,21 @@ $lang = [
     'terminos' => 'Acepto los términos y condiciones',
     'btn_registrar' => 'Registrarme',
     'ya_cuenta' => '¿Ya tienes cuenta?',
-    'iniciar_sesion' => 'Iniciar sesión'
+    'iniciar_sesion' => 'Iniciar sesión',
+    // Perfil
+    'mi_perfil' => 'Mi Perfil',
+    'sub_perfil' => 'Administra tu información personal y credenciales',
+    'volver_mapa' => 'Volver al Mapa',
+    'info_personal' => 'Información Personal',
+    'nombre_lbl' => 'Nombre',
+    'seudonimo_lbl' => 'Seudónimo',
+    'correo_lbl' => 'Correo Electrónico',
+    'cedula_rut_lbl' => 'Cédula / RUT',
+    'cambiar_pass' => 'Cambiar Contraseña (Opcional)',
+    'nueva_pass_lbl' => 'Nueva Contraseña',
+    'confirmar_pass_lbl' => 'Confirmar Contraseña',
+    'btn_guardar' => 'Guardar Cambios',
+    'pass_no_coinciden' => 'Las contraseñas nuevas no coinciden.',
+    'perfil_actualizado_exito' => 'Perfil actualizado correctamente.',
+    'nombre_correo_obligatorios' => 'El nombre y el correo son obligatorios.'
 ];

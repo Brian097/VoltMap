@@ -1,15 +1,29 @@
 <?php
 
-abstract class Usuario{
-
+abstract class Usuario {
     protected $id;
     protected $email;
-    protected $nombre:
+    protected $nombre;
     protected $contraseña;
-    protected $seudonimo;
+    protected $seudónimo;
     protected $fotoPerfil;
-    protected $estado
+    protected $estado;
 
+    public function __construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado) {
+        $this->id = $id;
+        $this->email = $email;
+        $this->nombre = $nombre;
+        $this->contraseña = $contraseña;
+        $this->seudónimo = $seudonimo;
+        $this->fotoPerfil = $fotoPerfil;
+        $this->estado = $estado;
+    }
+
+    // Getters y Setters básicos
+    public function getEmail() { return $this->email; }
+    public function getNombre() { return $this->nombre; }
+    public function getContraseña() { return $this->contraseña; }
+
+    abstract public function Registrar($conexion);
 }
-
 ?>
