@@ -26,3 +26,32 @@ CREATE TABLE usuarios (
     foto_cedula VARCHAR(255) DEFAULT NULL,
     rut VARCHAR(30) DEFAULT NULL
 );
+
+-- Script de Base de Datos (MySQL)
+
+CREATE TABLE puntos_carga (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    visible TINYINT(1) DEFAULT 1,
+    tipoUsuario VARCHAR(100) DEFAULT 'Público',
+    latitud DECIMAL(10, 8) NOT NULL,
+    longitud DECIMAL(11, 8) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    ciudadYDepartamento VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE cargadores (
+    id VARCHAR(50) PRIMARY KEY,
+    idPuntoCarga INT NOT NULL,
+    potenciaKilowatts DECIMAL(8, 2) DEFAULT 0.00,
+    tipoConector VARCHAR(100) NOT NULL,
+    tipoCargador VARCHAR(100) NOT NULL,
+    estadoUso VARCHAR(50) DEFAULT 'Disponible',
+    estadoOperativo VARCHAR(100) NOT NULL,
+    precioKwh DECIMAL(10, 2) DEFAULT 0.00,
+    precioHora DECIMAL(10, 2) DEFAULT 0.00,
+    CONSTRAINT fk_punto_carga 
+        FOREIGN KEY (idPuntoCarga) 
+        REFERENCES puntos_carga(id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

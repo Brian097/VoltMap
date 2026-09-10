@@ -17,8 +17,7 @@
 }
 
 body {
-  font-family: "Segoe UI", system-ui, Arial, sans-serif;
-  color: var(--txt);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;  color: var(--txt);
   background: var(--fondo);
   display: flex;
   align-items: center;
@@ -27,7 +26,7 @@ body {
 }
 
 button {
-  font-family: inherit;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
   cursor: pointer;
 }
 
@@ -76,7 +75,7 @@ a {
   border: 1.5px solid var(--borde);
   border-radius: 6px;
   font-size: 14px;
-  font-family: inherit;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
   color: var(--txt);
   background: #fff;
 }

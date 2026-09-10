@@ -1,13 +1,16 @@
 <?php
-    // 1. Cargamos la configuración global
+    // 1. Cargamos la configuración global (esto ejecuta tu función cargarEnv automáticamente)
     require_once __DIR__ . '/../../../config/config.php';
     
     // 2. Verificamos la autenticación
     require_once __DIR__ . "/../../view/inc/auth.php";
 
-    // 3. Incluimos el sistema de idiomas
+    // 3. Incluimos el sistema de idiomas (para que cargue $lang y $idioma_actual)
     require_once __DIR__ . "/../../view/inc/lang.php";
     /** @var array $lang */
+
+    // 4. Obtenemos la clave ya disponible en $_ENV
+    $ocmApiKey = $_ENV['OCM_API_KEY'] ?? '';
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +68,7 @@
 
     <!-- Contenedor del mapa -->
     <div class="mapa-area">
-      <!-- Aquí se renderiza el mapa leyendo de tu base de datos -->
+      <!-- Aquí se renderiza el mapa de Open Charge Map mediante Leaflet -->
       <div id="map"></div>
 
       <div class="leyenda-mapa">
@@ -119,13 +122,18 @@
     </div>
   </div>
 
+<!-- Inyectamos la API Key leída por tu config.php -->
+  <script>
+      const OCM_API_KEY = "<?php echo htmlspecialchars($ocmApiKey, ENT_QUOTES, 'UTF-8'); ?>";
+  </script>
+
   <!-- Librería de Leaflet -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Lógica para obtener los datos de TU base de datos (mediante api_puntos.php) -->
-  <script src="../../view/js/mapaCargadores.js"></script>
+  <!-- Lógica para obtener los datos de Open Charge Map -->
+  <script src="/app/view/js/openchargemap.js"></script>
 
-  <!-- Interacción general de la interfaz (chips, menú, etc.) -->
+  <!-- Interacción de la interfaz (chips, menú, etc.) -->
   <script src="/app/view/js/script.js"></script>
 </body>
 </html>

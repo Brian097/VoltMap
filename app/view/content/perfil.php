@@ -9,7 +9,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $lang['mi_perfil'] ?? 'Mi Perfil'; ?> - VoltMap</title>
-    <link rel="stylesheet" href="../../view/css/estilosLogin.css">
     <link rel="stylesheet" href="../../view/css/estilosPerfil.css">
 </head>
 <body>
@@ -28,8 +27,15 @@
                 <p><?php echo $lang['sub_perfil'] ?? 'Administra tu información personal y credenciales'; ?></p>
             </div>
 
-            <!-- Incluir el controlador que procesa la actualización y muestra alertas -->
+            <!-- Incluir el controlador que procesa la actualización y define las alertas -->
             <?php include_once __DIR__ . '/../../controller/controlador_perfil.php'; ?>
+
+            <?php if (!empty($mensaje)): ?>
+                <div class="perfil-alert <?php echo $tipoAlerta; ?>">
+                    <?php echo $mensaje; ?>
+                </div>
+            <?php endif; ?>
+
 
             <div class="perfil-grid">
                 

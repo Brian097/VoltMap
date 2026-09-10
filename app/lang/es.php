@@ -36,5 +36,23 @@ $lang = [
     'btn_guardar' => 'Guardar Cambios',
     'pass_no_coinciden' => 'Las contraseñas nuevas no coinciden.',
     'perfil_actualizado_exito' => 'Perfil actualizado correctamente.',
-    'nombre_correo_obligatorios' => 'El nombre y el correo son obligatorios.'
+    'nombre_correo_obligatorios' => 'El nombre y el correo son obligatorios.',
+    'pass_corta' => 'La contraseña debe tener al menos 8 caracteres.',
+    // Mapa
+    'titulo_mapa' => 'VoltMap — Mapa de Cargadores',
+    'buscar_placeholder' => 'Buscar dirección o lugar...',
+    'filtros_btn' => 'Filtros',
+    'notificaciones_btn' => 'Notificaciones',
+    'menu_btn' => 'Menú',
+    'chip_todos' => 'Todos',
+    'chip_disponible' => 'Disponible',
+    'chip_en_uso' => 'En uso',
+    'chip_fuera_servicio' => 'Fuera de servicio',
+    'chip_mas_filtros' => 'Más filtros',
+    'referencias_titulo' => 'Referencias',
+    'nav_mapa' => 'Mapa',
+    'nav_reservas' => 'Reservas',
+    'nav_publicar' => 'Publicar',
+    'nav_perfil' => 'Perfil',
+    'nav_vehiculos' => 'Vehículos'
 ];

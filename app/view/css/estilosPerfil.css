@@ -1,9 +1,14 @@
-/* Estilos específicos para la vista de Perfil */
+/* Estilos específicos y autónomos para la vista de Perfil */
 #s-perfil {
     overflow-y: auto;
-    background: var(--fondo);
+    background: var(--fondo, #f8fafc);
     padding: 30px 20px;
     min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
+}
+
+#s-perfil * {
+    box-sizing: border-box;
 }
 
 .perfil-container {
@@ -16,14 +21,17 @@
 }
 
 .perfil-header-info h1 {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
     font-size: 24px;
     font-weight: 900;
-    color: var(--txt);
+    color: var(--txt, #0f172a);
+    margin: 0 0 4px 0;
 }
 
 .perfil-header-info p {
-    color: var(--sub);
+    color: var(--sub, #64748b);
     font-size: 14px;
+    margin: 0;
 }
 
 .btn-volver {
@@ -33,12 +41,12 @@
     text-decoration: none;
     padding: 8px 14px;
     background: #fff;
-    border: 1px solid var(--borde);
+    border: 1px solid var(--borde, #cbd5e1);
     border-radius: 8px;
     font-size: 13px;
     font-weight: 700;
-    color: var(--txt);
-    box-shadow: var(--sh2);
+    color: var(--txt, #0f172a);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     transition: background 0.2s ease;
 }
 
@@ -56,7 +64,7 @@
     background: #fff;
     border-radius: 12px;
     padding: 30px;
-    box-shadow: var(--sh2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .perfil-section-title {
@@ -64,32 +72,113 @@
     font-weight: 800;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--borde);
-    color: var(--txt);
+    border-bottom: 1px solid var(--borde, #e2e8f0);
+    color: var(--txt, #0f172a);
 }
 
 .perfil-form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
+    margin-bottom: 14px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--txt, #1e293b);
+}
+
+.campo input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--borde, #cbd5e1);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.campo input:focus {
+    border-color: var(--azul, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .campo-disabled {
-    background: #f8fafc;
-    color: var(--sub);
+    background: #f8fafc !important;
+    color: var(--sub, #64748b) !important;
+    cursor: not-allowed;
 }
 
 .perfil-divider {
     height: 1px;
-    background: var(--borde);
+    background: var(--borde, #e2e8f0);
     margin: 20px 0;
 }
 
+/* Botones de acción */
+.btn-full {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.btn-azul {
+    background: var(--azul, #2563eb);
+    color: #fff;
+}
+
+.btn-azul:hover {
+    background: #1d4ed8;
+}
+
+/* Alertas de Perfil */
+.perfil-alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid transparent;
+}
+
+.perfil-alert.danger {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    border-color: #f5c6cb !important;
+}
+
+.perfil-alert.success {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+    border-color: #c3e6cb !important;
+}
+
+.perfil-alert.warning {
+    background-color: #fff3cd !important;
+    color: #856404 !important;
+    border-color: #ffeeba !important;
+}
+
+/* Barra lateral de perfil */
 .perfil-sidebar {
     background: #fff;
     border-radius: 12px;
     padding: 25px;
-    box-shadow: var(--sh2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     text-align: center;
     height: fit-content;
 }
@@ -98,7 +187,7 @@
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    background: var(--azul);
+    background: var(--azul, #2563eb);
     color: #fff;
     display: flex;
     align-items: center;
@@ -112,12 +201,12 @@
     font-size: 16px;
     font-weight: 800;
     margin-bottom: 2px;
-    color: var(--txt);
+    color: var(--txt, #0f172a);
 }
 
 .perfil-tipo-usuario {
     font-size: 12px;
-    color: var(--sub);
+    color: var(--sub, #64748b);
     margin-bottom: 14px;
     text-transform: capitalize;
 }
@@ -139,20 +228,23 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--verde);
+    background: var(--verde, #22c55e);
 }
 
 .perfil-id-box {
     text-align: left;
-    background: var(--fondo);
+    background: var(--fondo, #f1f5f9);
     padding: 12px;
     border-radius: 8px;
     font-size: 12px;
-    color: var(--sub);
+    color: var(--sub, #64748b);
 }
 
 @media (max-width: 768px) {
     .perfil-grid {
+        grid-template-columns: 1fr;
+    }
+    .perfil-form-row {
         grid-template-columns: 1fr;
     }
 }
