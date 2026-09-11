@@ -47,6 +47,9 @@
                     </button>
                 </div>
             </div>
+            <div style="margin-top: 15px; text-align: center;">
+                    <a href="mapa_invitado.php" style="color: #4b5563; text-decoration: none; font-size: 14px;"> Continuar como invitado (Ver mapa) </a>
+                </div>
         </div>
     </div>
     <script>

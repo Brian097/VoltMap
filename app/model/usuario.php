@@ -5,7 +5,7 @@ abstract class Usuario {
     protected $email;
     protected $nombre;
     protected $contraseña;
-    protected $seudónimo;
+    protected $seudonimo;
     protected $fotoPerfil;
     protected $estado;
 
@@ -14,7 +14,7 @@ abstract class Usuario {
         $this->email = $email;
         $this->nombre = $nombre;
         $this->contraseña = $contraseña;
-        $this->seudónimo = $seudonimo;
+        $this->seudonimo = $seudonimo;
         $this->fotoPerfil = $fotoPerfil;
         $this->estado = $estado;
     }

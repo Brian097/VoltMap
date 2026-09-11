@@ -1,8 +1,10 @@
 // view/js/mapaCargadores.js
 document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Inicializar el mapa centrado en Uruguay (o tus coordenadas base)
-    const map = L.map('map').setView([-34.9011, -56.1645], 7);
+    // 1. Inicializar el mapa centrado en Rocha (o tus coordenadas base)
+    const latInicial = -34.4811;
+    const lngInicial = -54.3333;
 
+    const map = L.map('map').setView([latInicial, lngInicial], 10);
     // 2. Cargar la capa base de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,

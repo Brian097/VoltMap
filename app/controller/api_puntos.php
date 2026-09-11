@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', 0);
 error_reporting(0);
 error_reporting(E_ALL);
 header('Content-Type: application/json');
@@ -51,8 +50,8 @@ if ($method === 'POST') {
                 $stmtCargador->close();
             }
         }
-    } // <-- FALTABA CERRAR EL foreach ($puntosCarga as $punto)
-} // Cierra el if ($method === 'POST')
+    }
+}
 
 // B. OBTENER PUNTOS Y CARGADORES PARA EL MAPA (GET)
 if ($method === 'GET') {
