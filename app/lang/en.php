@@ -54,5 +54,7 @@ $lang = [
     'nav_reservas' => 'Reservations',
     'nav_publicar' => 'Publish',
     'nav_perfil' => 'Profile',
-    'nav_vehiculos' => 'Vehicles'
+    'nav_vehiculos' => 'Vehicles',
+
+    'explorando_invitado' => 'You are exploring as a guest'
 ];

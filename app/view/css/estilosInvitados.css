@@ -1,40 +1,203 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    font-family: sans-serif;
+:root {
+  --azul: #1B3A6B;
+  --azul2: #1D4ED8;
+  --fondo: #F1F5F9;
+  --blanco: #FFFFFF;
+  --borde: #CBD5E1;
+  --txt: #0F172A;
+  --sub: #64748B;
+  --sh2: 0 4px 18px rgba(0, 0, 0, .14);
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--txt);
+  background: var(--fondo);
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Contenedor principal del mapa ocupando toda la pantalla */
 #map {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
+/* Barra superior optimizada: con margen izquierdo para no solapar los controles de zoom de Leaflet */
+.mapa-topbar {
+  position: absolute;
+  top: 12px;
+  left: 55px; /* Margen de seguridad para que no choque con los botones de zoom del mapa */
+  right: 12px; 
+  width: auto;
+  max-width: 580px; 
+  margin: 0; 
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  background: var(--blanco);
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: var(--sh2);
+  gap: 10px;
+}
+
+.mapa-logo img {
+  height: 28px; /* Tamaño proporcionado para el logo pequeño */
+  width: auto;
+  display: block;
+}
+
+/* Líneas separadoras sutiles */
+.mapa-divider {
+  width: 1px;
+  height: 22px;
+  background-color: var(--borde);
+  flex-shrink: 0;
+}
+
+/* Contenedor interno del input y la lupa */
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 8px;
+  min-width: 0; /* Impide que el input rompa el flexbox */
+}
+
+.search-icon {
+  color: var(--sub);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.search-bar {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px; /* Tamaño cómodo para lectura y escritura */
+  color: var(--txt);
+  background: transparent;
+  font-family: inherit;
+  padding: 4px 0;
+  min-width: 0; 
+}
+
+.search-bar::placeholder {
+  color: #94a3b8;
+}
+
+/* Botón de cambio de idioma compacto y alineado */
+.lang-btn-toggle {
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  color: var(--txt);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.lang-btn-toggle:hover {
+  background: var(--borde);
+}
+
+/* Banner flotante de invitado en la parte inferior (móviles) */
 .guest-banner {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 1000;
-    background: white;
-    padding: 12px 18px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  position: absolute;
+  bottom: 20px;
+  left: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: var(--blanco);
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: var(--sh2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .btn-login {
-    background: #2563eb;
-    color: white;
-    padding: 8px 14px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+  background: var(--azul2);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s ease;
 }
 
 .btn-login:hover {
-    background: #1d4ed8;
+  background: #1e40af;
+}
+
+/* Ajustes responsivos para tablets y escritorio (min-width: 768px) */
+@media (min-width: 768px) {
+  .mapa-topbar {
+    top: 20px;
+    left: 65px; /* Margen izquierdo seguro para los controles de zoom en PC */
+    right: auto;
+    width: 520px;
+    max-width: none;
+    margin: 0;
+    padding: 10px 16px;
+    gap: 12px;
+  }
+
+  .mapa-logo img {
+    height: 34px;
+  }
+
+  .mapa-divider {
+    height: 26px;
+  }
+
+  .search-bar {
+    font-size: 14px;
+  }
+
+  .lang-btn-toggle {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .guest-banner {
+    top: 20px;
+    left: auto;
+    right: 20px;
+    bottom: auto;
+    width: auto;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .btn-login {
+    padding: 9px 16px;
+    font-size: 14px;
+  }
 }

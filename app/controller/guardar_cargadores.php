@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once __DIR__ . '/../model/conexion.php'; // Tu archivo de conexión existente
+require_once __DIR__ . '/../model/conexion.php'; 
 
 // 1. Leer el JSON enviado por fetch desde JavaScript
 $inputJSON = file_get_contents('php://input');
