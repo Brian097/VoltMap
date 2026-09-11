@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btneditar'])) {
     $precioHora          = !empty($_POST['precioHora']) ? floatval($_POST['precioHora']) : null;
 
     if ($idPunto <= 0) {
-        header("Location: ../view/dashboard/mis_cargadores.php?error=id_invalido");
+        header("Location: ../view/content/mis_cargadores.php?error=id_invalido");
         exit();
     }
 
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btneditar'])) {
 
     if ($resultadoVerificar->num_rows === 0) {
         $stmtVerificar->close();
-        header("Location: ../view/dashboard/mis_cargadores.php?error=no_autorizado");
+        header("Location: ../view/content/mis_cargadores.php?error=no_autorizado");
         exit();
     }
     $stmtVerificar->close();
@@ -61,16 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btneditar'])) {
 
         // Confirmar transacción
         $conexion->commit();
-        header("Location: ../view/dashboard/mis_cargadores.php?exito=actualizado");
+        header("Location: ../view/content/mis_cargadores.php?exito=actualizado");
         exit();
 
     } catch (Exception $e) {
         // Revertir en caso de fallo
         $conexion->rollback();
-        header("Location: ../view/dashboard/editar_cargador.php?id=" . $idPunto . "&error=fallo_actualizacion");
+        header("Location: ../view/content/editar_cargador.php?id=" . $idPunto . "&error=fallo_actualizacion");
         exit();
     }
 } else {
-    header("Location: ../view/dashboard/mis_cargadores.php");
+    header("Location: ../view/content/mis_cargadores.php");
     exit();
 }

@@ -35,18 +35,16 @@ if (isset($_GET['eliminar'])) {
             $stmtP->close();
 
             $conexion->commit();
-            $mensaje = $lang['cargador_eliminado_exito'] ?? 'Cargador eliminado correctamente.';
-            $tipoAlerta = "success";
         } else {
             $conexion->rollback();
-            $mensaje = "No tienes permisos para eliminar este cargador.";
-            $tipoAlerta = "danger";
         }
     } catch (Exception $e) {
         $conexion->rollback();
-        $mensaje = "Error al eliminar el cargador.";
-        $tipoAlerta = "danger";
     }
+
+    // Redirección inmediata para limpiar el parámetro ?eliminar= y evitar que la vista se rompa
+    header("Location: controlador_mis_cargadores.php");
+    exit();
 }
 
 // Obtener la lista de cargadores del usuario
@@ -60,5 +58,5 @@ $stmtLista->bind_param("i", $idUsuarioActual);
 $stmtLista->execute();
 $resultado = $stmtLista->get_result();
 
-// Nota: El controlador incluye la vista al finalizar para pasarle las variables $resultado, $mensaje, etc.
-require_once __DIR__ . "/../view/dashboard/mis_cargadores.php";
+// Incluye la vista adaptada a tu estructura en view/content/mis_cargadores.php
+require_once __DIR__ . "/../view/content/mis_cargadores.php";

@@ -27,15 +27,14 @@ if (!isset($resultado)) {
     <!-- Etiqueta indispensable para diseño responsive en teléfonos -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Estilo base unificado del sistema -->
-    <link rel="stylesheet" href="../../view/css/estilosPublicar.css">
+    <link rel="stylesheet" href="/app/view/css/estilosPublicar.css">
     <!-- Estilo específico para mis cargadores -->
-    <link rel="stylesheet" href="../../view/css/estilosMisCargadores.css">
-</head>
+    <link rel="stylesheet" href="/app/view/css/estilosMisCargadores.css">
 <body>
     <div class="sc on">
         <div class="perfil-container mis-cargadores-container">
             <div class="perfil-nav-volver">
-                <a href="mapa.php" class="btn-volver">← Volver al Mapa</a>
+                <a href="/app/view/content/mapa.php" class="btn-volver">← Volver al Mapa</a>
             </div>
 
             <div class="perfil-header-info">
@@ -63,7 +62,7 @@ if (!isset($resultado)) {
                                         <?php echo $lang['editar'] ?? 'Editar'; ?>
                                     </a>
                                     <!-- Si quieres que el enlace de eliminar pase por el controlador, puedes apuntarlo a ../../controller/controlador_mis_cargadores.php?eliminar=... o mantenerlo si la vista redirige -->
-                                    <a href="mis_cargadores.php?eliminar=<?php echo $row['idPunto']; ?>" class="btn-accion-eliminar" onclick="return confirm('<?php echo $lang['confirmar_eliminar'] ?? '¿Estás seguro de eliminar este cargador?'; ?>');">
+                                    <a href="../../controller/controlador_mis_cargadores.php?eliminar=<?php echo $row['idPunto']; ?>" class="btn-accion-eliminar" onclick="return confirm('<?php echo $lang['confirmar_eliminar'] ?? '¿Estás seguro de eliminar este cargador?'; ?>');">
                                         <?php echo $lang['eliminar'] ?? 'Eliminar'; ?>
                                     </a>
                                 </div>
