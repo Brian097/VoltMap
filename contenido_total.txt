@@ -1,0 +1,3478 @@
+/config/app.php ->
+<?php
+    //const APP_URL="http://voltmap.duckdns.org/"
+    const APP_URL="http://localhost/voltmap/";
+    const APP_NAME="voltmap";
+    const APP_SESSION_NAME = "garradev";
+    
+//    function date_default_timezone_set("America/Montevideo");
+?>
+========================================
+/config/config.php ->
+<?php
+function cargarEnv() {
+    // Definimos las rutas posibles dentro de los límites permitidos por el servidor
+    $rutasPosibles = [
+        __DIR__ . '/.env',          // Si config.php está en la raíz
+        dirname(__DIR__) . '/.env', // Si config.php está dentro de una carpeta (ej. /config/)
+    ];
+
+    $rutaFinal = null;
+
+    foreach ($rutasPosibles as $ruta) {
+        // Usamos realpath solo si el archivo existe para evitar avisos
+        if (file_exists($ruta)) {
+            $rutaFinal = realpath($ruta);
+            break;
+        }
+    }
+
+    if (!$rutaFinal) {
+        echo "<h3>❌ Error Crítico: PHP no puede leer el archivo .env</h3>";
+        echo "Buscamos en las siguientes ubicaciones y todas fallaron:<br>";
+        foreach ($rutasPosibles as $r) {
+            echo "- ❌ No existe o está fuera de path: " . htmlspecialchars($r) . "<br>";
+        }
+        echo "<br><b>Tu directorio actual de ejecución es:</b> " . __DIR__ . "<br>";
+        return false;
+    }
+
+    $contenido = file_get_contents($rutaFinal);
+    $lineas = preg_split('/\r\n|\r|\n/', $contenido);
+
+    foreach ($lineas as $linea) {
+        $linea = trim($linea);
+        if (empty($linea) || strpos($linea, '#') === 0) continue;
+
+        if (strpos($linea, '=') !== false) {
+            list($clave, $valor) = explode('=', $linea, 2);
+            $clave = trim($clave);
+            $valor = trim($valor, " \t\n\r\0\x0B\"'");
+
+            // ELIMINAMOS putenv() porque está bloqueado en tu servidor.
+            // Usamos únicamente los arrays globales:
+            $_ENV[$clave] = $valor;
+            $_SERVER[$clave] = $valor;
+        }
+    }
+    return true;
+}
+
+cargarEnv();
+========================================
+/config/config.js ->
+// C:\xampp\htdocs\voltmap\config.js
+const fs = require('fs');
+const path = require('path');
+
+function cargarEnv() {
+    // Definimos las rutas más probables donde podría estar el .env
+    const rutasPosibles = [
+        path.join(__dirname, '.env'),                      // En la misma carpeta que config.js
+        path.join(__dirname, '..', '.env'),                // Una carpeta arriba
+        'C:\\xampp\\htdocs\\voltmap\\.env'                 // Ruta absoluta directa en Windows
+    ];
+
+    let rutaFinal = null;
+
+    for (const ruta of rutasPosibles) {
+        if (fs.existsSync(ruta)) {
+            rutaFinal = ruta;
+            break;
+        }
+    }
+
+    // Si no lo encuentra en ningún lado, muestra un diagnóstico claro en la terminal
+    if (!rutaFinal) {
+        console.error("❌ Error Crítico: Node.js no puede leer el archivo .env");
+        console.log("Se buscaron las siguientes rutas y todas fallaron:");
+        rutasPosibles.forEach(r => console.log(` - ❌ No existe en: ${r}`));
+        return false;
+    }
+
+    // Leer el archivo y separar por cualquier tipo de salto de línea (\n o \r\n)
+    const contenido = fs.readFileSync(rutaFinal, 'utf-8');
+    const lineas = contenido.split(/\r?\n/);
+
+    lineas.forEach(linea => {
+        linea = linea.trim();
+        
+        // Ignorar líneas vacías o comentarios
+        if (!linea || linea.startsWith('#')) return;
+
+        // Buscar el primer signo "=" para separar clave y valor
+        if (linea.includes('=')) {
+            const [clave, ...resto] = linea.split('=');
+            const valorRaw = resto.join('=').trim();
+            
+            // Limpiar comillas iniciales o finales si las hay
+            const valor = valorRaw.replace(/^['"]|['"]$/g, '');
+
+            // Guardar globalmente en el objeto nativo de entorno de Node.js
+            process.env[clave.trim()] = valor;
+        }
+    });
+
+    return true;
+}
+
+// Ejecutar la función inmediatamente al requerir este archivo
+cargarEnv();
+
+========================================
+/.htaccess ->
+RewriteEngine On
+Options All -Indexes
+========================================
+/.idea/htdocs.iml ->
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
+========================================
+/.idea/modules.xml ->
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/htdocs.iml" filepath="$PROJECT_DIR$/.idea/htdocs.iml" />
+    </modules>
+  </component>
+</project>
+========================================
+/.idea/php.xml ->
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MessDetectorOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCSFixerOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="highlightLevel" value="WARNING" />
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PhpStanOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+  <component name="PsalmOptionsConfiguration">
+    <option name="transferred" value="true" />
+  </component>
+</project>
+========================================
+/.idea/vcs.xml ->
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+  </component>
+</project>
+========================================
+/.idea/.gitignore ->
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Ignored default folder with query files
+/queries/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+========================================
+/bd.txt ->
+CREATE DATABASE IF NOT EXISTS voltmap CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE voltmap;
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_usuario ENUM('part', 'emp') NOT NULL DEFAULT 'part',
+    nombre VARCHAR(100) NOT NULL,
+    cedula VARCHAR(20) DEFAULT NULL,
+    rut VARCHAR(20) DEFAULT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_usuario ENUM('particular', 'empresa', 'moderador', 'administrador') NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    seudonimo VARCHAR(50) DEFAULT NULL,
+    foto_perfil VARCHAR(255) DEFAULT NULL,
+    estado VARCHAR(50) DEFAULT 'activo',
+    cedula_identidad VARCHAR(20) DEFAULT NULL,
+    foto_cedula VARCHAR(255) DEFAULT NULL,
+    rut VARCHAR(30) DEFAULT NULL
+);
+
+-- Script de Base de Datos (MySQL)
+
+CREATE TABLE puntos_carga (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    visible TINYINT(1) DEFAULT 1,
+    tipoUsuario VARCHAR(100) DEFAULT 'Público',
+    latitud DECIMAL(10, 8) NOT NULL,
+    longitud DECIMAL(11, 8) NOT NULL,
+    direccion VARCHAR(255) NOT NULL,
+    ciudadYDepartamento VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE cargadores (
+    id VARCHAR(50) PRIMARY KEY,
+    idPuntoCarga INT NOT NULL,
+    potenciaKilowatts DECIMAL(8, 2) DEFAULT 0.00,
+    tipoConector VARCHAR(100) NOT NULL,
+    tipoCargador VARCHAR(100) NOT NULL,
+    estadoUso VARCHAR(50) DEFAULT 'Disponible',
+    estadoOperativo VARCHAR(100) NOT NULL,
+    precioKwh DECIMAL(10, 2) DEFAULT 0.00,
+    precioHora DECIMAL(10, 2) DEFAULT 0.00,
+    CONSTRAINT fk_punto_carga 
+        FOREIGN KEY (idPuntoCarga) 
+        REFERENCES puntos_carga(id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+========================================
+/app/lang/en.php ->
+<?php
+$lang = [
+    'bienvenida' => 'Welcome back',
+    'sub_login' => 'Log in to continue',
+    'usuario_lbl' => 'Email, ID or RUT',
+    'pass_lbl' => 'Password',
+    'btn_ingresar' => 'Log in',
+    'no_cuenta' => "Don't have an account?",
+    'registrate' => 'Sign up here',
+    // Registro
+    'crear_cuenta' => 'Create account',
+    'sub_registro' => 'Complete your details to register',
+    'particular' => 'Individual',
+    'empresa' => 'Company',
+    'nombre_completo' => 'Full name',
+    'cedula' => 'Identity card',
+    'rut' => 'RUT number',
+    'correo' => 'Email address',
+    'confirm_pass' => 'Confirm password',
+    'terminos' => 'I accept the terms and conditions',
+    'btn_registrar' => 'Sign up',
+    'ya_cuenta' => 'Already have an account?',
+    'iniciar_sesion' => 'Log in',
+    // Perfil
+    'mi_perfil' => 'My Profile',
+    'sub_perfil' => 'Manage your personal information and credentials',
+    'volver_mapa' => 'Back to Map',
+    'info_personal' => 'Personal Information',
+    'nombre_lbl' => 'Name',
+    'seudonimo_lbl' => 'Nickname',
+    'correo_lbl' => 'Email',
+    'cedula_rut_lbl' => 'ID / RUT',
+    'cambiar_pass' => 'Change Password (Optional)',
+    'nueva_pass_lbl' => 'New Password',
+    'confirmar_pass_lbl' => 'Confirm Password',
+    'btn_guardar' => 'Save Changes',
+    'pass_no_coinciden' => 'New passwords do not match.',
+    'perfil_actualizado_exito' => 'Profile updated successfully.',
+    'nombre_correo_obligatorios' => 'Name and email are required.',
+    'pass_corta' => 'Password must be at least 8 characters long.',
+    // Mapa
+    'titulo_mapa' => 'VoltMap — Charger Map',
+    'buscar_placeholder' => 'Search address or place...',
+    'filtros_btn' => 'Filters',
+    'notificaciones_btn' => 'Notifications',
+    'menu_btn' => 'Menu',
+    'chip_todos' => 'All',
+    'chip_disponible' => 'Available',
+    'chip_en_uso' => 'In use',
+    'chip_fuera_servicio' => 'Out of Order',
+    'chip_mas_filtros' => 'More filters',
+    'referencias_titulo' => 'References',
+    'nav_mapa' => 'Map',
+    'nav_reservas' => 'Reservations',
+    'nav_publicar' => 'Publish',
+    'nav_perfil' => 'Profile',
+    'nav_vehiculos' => 'Vehicles',
+
+    'explorando_invitado' => 'You are exploring as a guest'
+];
+========================================
+/app/lang/es.php ->
+<?php
+$lang = [
+    'bienvenida' => 'Bienvenido de nuevo',
+    'sub_login' => 'Inicia sesión para continuar',
+    'usuario_lbl' => 'Correo, Cédula o RUT',
+    'pass_lbl' => 'Contraseña',
+    'btn_ingresar' => 'Iniciar sesión',
+    'no_cuenta' => '¿No tienes cuenta?',
+    'registrate' => 'Regístrate aquí',
+    // Registro
+    'crear_cuenta' => 'Crear cuenta',
+    'sub_registro' => 'Completa tus datos para registrarte',
+    'particular' => 'Particular',
+    'empresa' => 'Empresa',
+    'nombre_completo' => 'Nombre completo',
+    'cedula' => 'Cédula de identidad',
+    'rut' => 'Número de RUT',
+    'correo' => 'Correo electrónico',
+    'confirm_pass' => 'Confirmar contraseña',
+    'terminos' => 'Acepto los términos y condiciones',
+    'btn_registrar' => 'Registrarme',
+    'ya_cuenta' => '¿Ya tienes cuenta?',
+    'iniciar_sesion' => 'Iniciar sesión',
+    // Perfil
+    'mi_perfil' => 'Mi Perfil',
+    'sub_perfil' => 'Administra tu información personal y credenciales',
+    'volver_mapa' => 'Volver al Mapa',
+    'info_personal' => 'Información Personal',
+    'nombre_lbl' => 'Nombre',
+    'seudonimo_lbl' => 'Seudónimo',
+    'correo_lbl' => 'Correo Electrónico',
+    'cedula_rut_lbl' => 'Cédula / RUT',
+    'cambiar_pass' => 'Cambiar Contraseña (Opcional)',
+    'nueva_pass_lbl' => 'Nueva Contraseña',
+    'confirmar_pass_lbl' => 'Confirmar Contraseña',
+    'btn_guardar' => 'Guardar Cambios',
+    'pass_no_coinciden' => 'Las contraseñas nuevas no coinciden.',
+    'perfil_actualizado_exito' => 'Perfil actualizado correctamente.',
+    'nombre_correo_obligatorios' => 'El nombre y el correo son obligatorios.',
+    'pass_corta' => 'La contraseña debe tener al menos 8 caracteres.',
+    // Mapa
+    'titulo_mapa' => 'VoltMap — Mapa de Cargadores',
+    'buscar_placeholder' => 'Buscar dirección o lugar...',
+    'filtros_btn' => 'Filtros',
+    'notificaciones_btn' => 'Notificaciones',
+    'menu_btn' => 'Menú',
+    'chip_todos' => 'Todos',
+    'chip_disponible' => 'Disponible',
+    'chip_en_uso' => 'En uso',
+    'chip_fuera_servicio' => 'Fuera de servicio',
+    'chip_mas_filtros' => 'Más filtros',
+    'referencias_titulo' => 'Referencias',
+    'nav_mapa' => 'Mapa',
+    'nav_reservas' => 'Reservas',
+    'nav_publicar' => 'Publicar',
+    'nav_perfil' => 'Perfil',
+    'nav_vehiculos' => 'Vehículos',
+
+    'explorando_invitado' => 'Estás explorando como invitado'
+];
+========================================
+/app/model/usuario.php ->
+<?php
+
+abstract class Usuario {
+    protected $id;
+    protected $email;
+    protected $nombre;
+    protected $contraseña;
+    protected $seudonimo;
+    protected $fotoPerfil;
+    protected $estado;
+
+    public function __construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado) {
+        $this->id = $id;
+        $this->email = $email;
+        $this->nombre = $nombre;
+        $this->contraseña = $contraseña;
+        $this->seudonimo = $seudonimo;
+        $this->fotoPerfil = $fotoPerfil;
+        $this->estado = $estado;
+    }
+
+    // Getters y Setters básicos
+    public function getEmail() { return $this->email; }
+    public function getNombre() { return $this->nombre; }
+    public function getContraseña() { return $this->contraseña; }
+
+    abstract public function Registrar($conexion);
+}
+?>
+========================================
+/app/model/usuarioParticular.php ->
+<?php
+class UsuarioParticular extends Usuario {
+    private $cedulaldentidad;
+    private $fotoCedula;
+
+    public function __construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado, $cedulaldentidad, $fotoCedula) {
+        parent::__construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado);
+        $this->cedulaldentidad = $cedulaldentidad;
+        $this->fotoCedula = $fotoCedula;
+    }
+
+    // Getters
+    public function getCedulaldentidad() { return $this->cedulaldentidad; }
+    public function getFotoCedula() { return $this->fotoCedula; }
+
+    // Setters
+    public function setCedulaldentidad($cedulaldentidad) { $this->cedulaldentidad = $cedulaldentidad; }
+    public function setFotoCedula($fotoCedula) { $this->fotoCedula = $fotoCedula; }
+
+    public function agregarVehiculo() {
+        // Lógica para agregar vehículo
+    }
+
+    public function reservar() {
+        // Lógica para reservar
+    }
+
+    public function cancelarReserva() {
+        // Lógica para cancelar reserva
+    }
+
+    public function calificar() {
+        // Lógica para calificar
+    }
+
+    public function Registrar($conexion) {
+        $tipo = 'particular';
+        $stmt = $conexion->prepare("INSERT INTO usuarios (tipo_usuario, nombre, correo, password, seudonimo, foto_perfil, estado, cedula_identidad, foto_cedula) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        // Corregido aquí: de $this->cedulaIdentidad a $this->cedulaldentidad
+        $stmt->bind_param("sssssssss", $tipo, $this->nombre, $this->email, $this->contraseña, $this->seudonimo, $this->fotoPerfil, $this->estado, $this->cedulaldentidad, $this->fotoCedula);
+        return $stmt;
+    }
+}
+?>
+========================================
+/app/model/cargador.php ->
+<?php
+
+class Cargador {
+    public string $id;
+    public int $idPuntoCarga;
+    public float $potenciaKilowatts;
+    public string $tipoConector;
+    public string $tipoCargador;
+    public string $estadoUso;
+    public string $estadoOperativo;
+    public float $precioKwh;
+    public float $precioHora;
+
+    public function __construct(
+        string $id,
+        int $idPuntoCarga,
+        float $potenciaKilowatts,
+        string $tipoConector,
+        string $tipoCargador,
+        string $estadoUso,
+        string $estadoOperativo,
+        float $precioKwh,
+        float $precioHora
+    ) {
+        $this->id = $id;
+        $this->idPuntoCarga = $idPuntoCarga;
+        $this->potenciaKilowatts = $potenciaKilowatts;
+        $this->tipoConector = $tipoConector;
+        $this->tipoCargador = $tipoCargador;
+        $this->estadoUso = $estadoUso;
+        $this->estadoOperativo = $estadoOperativo;
+        $this->precioKwh = $precioKwh;
+        $this->precioHora = $precioHora;
+    }
+
+    public function publicar(): bool {
+        // Lógica para publicar el cargador individual
+        return true;
+    }
+
+    public function editar(): bool {
+        // Lógica para editar el cargador
+        return true;
+    }
+
+    public function borrar(): bool {
+        // Lógica para eliminar el cargador
+        return true;
+    }
+
+    public function pausar(): bool {
+        // Lógica para pausar el cargador
+        return true;
+    }
+
+    public function reanudar(): bool {
+        // Lógica para reanudar el cargador
+        return true;
+    }
+}
+========================================
+/app/model/puntoCarga.php ->
+<?php
+require_once __DIR__ . '/Cargador.php';
+
+class PuntoCarga {
+    public int $id;
+    public bool $visible;
+    public string $tipoUsuario;
+    public float $latitud;
+    public float $longitud;
+    public string $direccion;
+    public string $ciudadYDepartamento;
+    /** @var Cargador[] */
+    public array $cargadores = [];
+
+    public function __construct(
+        int $id,
+        bool $visible,
+        string $tipoUsuario,
+        float $latitud,
+        float $longitud,
+        string $direccion,
+        string $ciudadYDepartamento,
+        array $cargadores = []
+    ) {
+        $this->id = $id;
+        $this->visible = $visible;
+        $this->tipoUsuario = $tipoUsuario;
+        $this->latitud = $latitud;
+        $this->longitud = $longitud;
+        $this->direccion = $direccion;
+        $this->ciudadYDepartamento = $ciudadYDepartamento;
+        $this->cargadores = $cargadores;
+    }
+
+    public function estadisticas(): array {
+        // Lógica para obtener estadísticas del punto de carga
+        return [];
+    }
+
+    public function publicar(): bool {
+        // Lógica para publicar el punto completo
+        return true;
+    }
+
+    public function editar(): bool {
+        // Lógica para editar el punto de carga
+        return true;
+    }
+
+    public function borrar(): bool {
+        // Lógica para borrar el punto de carga y sus conectores
+        return true;
+    }
+
+    public function pausar(): bool {
+        // Lógica para pausar el punto de carga
+        return true;
+    }
+
+    public function reanudar(): bool {
+        // Lógica para reanudar el punto de carga
+        return true;
+    }
+}
+========================================
+/app/model/moderador.php ->
+<?php
+
+class Moderador extends Usuario {
+    public function __construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado) {
+        parent::__construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado);
+    }
+
+    public function validarReporte() {
+        // Lógica para validar reporte
+    }
+
+    public function calificarReporte() {
+        // Lógica para calificar reporte
+    }
+
+    public function Registrar($conexion){}
+    
+}
+
+?>
+========================================
+/app/model/usuarioEmpresa.php ->
+<?php
+
+class UsuarioEmpresa extends Usuario {
+    private $rut;
+
+    public function __construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado, $rut) {
+        parent::__construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado);
+        $this->rut = $rut;
+    }
+
+    // Getters y Setters
+    public function getRut() { return $this->rut; }
+    public function setRut($rut) { $this->rut = $rut; }
+
+    public function publicarCargador() {
+        // Lógica para publicar cargador
+    }
+
+    public function gestionarCargadores() {
+        // Lógica para gestionar cargadores
+    }
+
+    public function consultarEstadistica() {
+        // Lógica para consultar estadística
+    }
+
+    public function Registrar($conexion) {
+        $tipo = 'empresa';
+        $stmt = $conexion->prepare("INSERT INTO usuarios (tipo_usuario, nombre, correo, password, seudonimo, foto_perfil, estado, rut) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssss", $tipo, $this->nombre, $this->email, $this->contraseña, $this->seudonimo, $this->fotoPerfil, $this->estado, $this->rut);
+        return $stmt;
+    }
+}
+
+?>
+========================================
+/app/model/administrador.php ->
+<?php
+
+class Administrador extends Usuario {
+    public function __construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado) {
+        parent::__construct($id, $email, $nombre, $contraseña, $seudonimo, $fotoPerfil, $estado);
+    }
+
+    public function promoverUsuario() {
+        // Lógica para promover usuario
+    }
+
+    public function consultarEstadistica() {
+        // Lógica para consultar estadística
+    }
+
+    public function configurarComision() {
+        // Lógica para configurar comisión
+    }
+
+    public function Registrar($conexion){}
+
+}
+
+?>
+========================================
+/app/model/conexion.php ->
+<?php
+require_once __DIR__ . '/../../config/config.php';
+
+$conexion = new mysqli($_ENV['DB_SERVER'], $_ENV['DB_USER'], $_ENV['DB_PASSW'], $_ENV['DB_NAME']);
+
+if ($conexion->connect_error) {
+    die("Error de conexión: " . $conexion->connect_error);
+}
+?>
+
+
+========================================
+/app/service/SyncOpenChargeMap.php ->
+<?php
+function sincronizarCargadoresOCM($conexion) {
+    $OCM_API_KEY = $_ENV['OCM_API_KEY'] ?? getenv('OCM_API_KEY') ?? '';
+    $apiUrl = "https://api.openchargemap.io/v3/poi?output=json&countrycode=UY&maxresults=700&key=$OCM_API_KEY";
+
+
+    $options = [
+        "http" => [
+            "header" => "User-Agent: VoltMap-App\r\n"
+        ]
+    ];
+    $context = stream_context_create($options);
+    $response = @file_get_contents($apiUrl, false, $context);
+
+    if ($response === false) {
+        return false;
+    }
+
+    $stations = json_decode($response, true);
+    if (!is_array($stations)) {
+        return false;
+    }
+
+    $conexion->begin_transaction();
+
+    try {
+        foreach ($stations as $station) {
+            $address = $station['AddressInfo'] ?? [];
+            $puntoId = $station['ID'];
+            $visible = ($station['IsOperational'] ?? true) ? 1 : 0;
+            $tipoUsuario = $station['OperatorInfo']['Title'] ?? 'Público';
+            $latitud = $address['Latitude'] ?? 0;
+            $longitud = $address['Longitude'] ?? 0;
+            $direccion = $address['AddressLine1'] ?? 'Sin dirección';
+            $ciudadYDepartamento = trim(($address['Town'] ?? '') . ', ' . ($address['StateOrProvince'] ?? ''));
+
+            $sqlPunto = "INSERT INTO puntos_carga (id, visible, tipoUsuario, latitud, longitud, direccion, ciudadYDepartamento) 
+                         VALUES (?, ?, ?, ?, ?, ?, ?) 
+                         ON DUPLICATE KEY UPDATE 
+                         visible = VALUES(visible), tipoUsuario = VALUES(tipoUsuario), 
+                         latitud = VALUES(latitud), longitud = VALUES(longitud), 
+                         direccion = VALUES(direccion), ciudadYDepartamento = VALUES(ciudadYDepartamento)";
+            
+            $stmtPunto = $conexion->prepare($sqlPunto);
+            $stmtPunto->bind_param("iissdss", $puntoId, $visible, $tipoUsuario, $latitud, $longitud, $direccion, $ciudadYDepartamento);
+            $stmtPunto->execute();
+            $stmtPunto->close();
+        
+                if (!empty($station['Connections'])) {
+                $stmtDel = $conexion->prepare("DELETE FROM cargadores WHERE idPuntoCarga = ?");
+                $stmtDel->bind_param("i", $puntoId);
+                $stmtDel->execute();
+                $stmtDel->close();
+
+                foreach ($station['Connections'] as $index => $conn) {
+                    // Obtenemos la cantidad que indica OCM (si no viene o está vacío, asumimos al menos 1)
+                    $cantidadConectores = isset($conn['Quantity']) && $conn['Quantity'] > 0 ? (int)$conn['Quantity'] : 1;
+
+                    // Iteramos tantas veces como indique la cantidad física del conector
+                    for ($q = 0; $q < $cantidadConectores; $q++) {
+                        // Creamos un ID único combinando el punto, el índice del array y la subcantidad
+                        $cId = "{$puntoId}-{$index}-{$q}"; 
+                        
+                        $potencia = $conn['PowerKW'] ?? 0;
+                        $tConector = $conn['ConnectionType']['Title'] ?? 'Desconocido';
+                        $tCargador = $conn['CurrentType']['Title'] ?? ($conn['Level']['Title'] ?? 'Desconocido');
+                        $eUso = 'Disponible';
+                        $eOp = $conn['StatusType']['Title'] ?? ($station['StatusType']['Title'] ?? 'Desconocido');
+                        $pKwh = 0.0;
+                        $pHora = 0.0;
+
+                        $sqlCargador = "INSERT INTO cargadores (id, idPuntoCarga, potenciaKilowatts, tipoConector, tipoCargador, estadoUso, estadoOperativo, precioKwh, precioHora) 
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                        $stmtCargador = $conexion->prepare($sqlCargador);
+                        $stmtCargador->bind_param("sidsdssdd", $cId, $puntoId, $potencia, $tConector, $tCargador, $eUso, $eOp, $pKwh, $pHora);
+                        $stmtCargador->execute();
+                        $stmtCargador->close();
+                    }
+                }
+            }
+        }
+        $conexion->commit();
+        return true;
+    } catch (Exception $e) {
+        $conexion->rollback();
+        return false;
+    }
+}
+========================================
+/app/view/js/script.js ->
+function ir(id) {
+  document.querySelectorAll(".sc").forEach(s => s.classList.remove("on"));
+  document.getElementById(id).classList.add("on");
+  window.scrollTo(0, 0);
+}
+function selChip(el) {
+  el.closest(".filtros-bar").querySelectorAll(".chip").forEach(c => c.classList.remove("sel"));
+  el.classList.add("sel");
+}
+
+function selTipo(btn, tipo) {
+    // 1. Manejar clases visuales de los botones
+    document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+
+    // 2. Actualizar el input oculto para que PHP reciba 'part' o 'emp'
+    const inputTipo = document.getElementById('tipo_usuario');
+    if (inputTipo) {
+        inputTipo.value = tipo;
+    }
+
+    // 3. Mostrar u ocultar campos de Cédula y RUT según corresponda
+    const campoCi = document.getElementById('r-ci');
+    const campoRut = document.getElementById('r-rut');
+    const inputCi = document.getElementById('cedula');
+    const inputRut = document.getElementById('rut');
+
+    if (tipo === 'part') {
+        if (campoCi) campoCi.style.display = 'block';
+        if (campoRut) campoRut.style.display = 'none';
+        if (inputCi) inputCi.required = true;
+        if (inputRut) inputRut.required = false;
+        if (inputRut) inputRut.value = ''; // Limpiar RUT si cambia a particular
+    } else {
+        if (campoCi) campoCi.style.display = 'none';
+        if (campoRut) campoRut.style.display = 'block';
+        if (inputCi) inputCi.required = false;
+        if (inputRut) inputRut.required = true;
+        if (inputCi) inputCi.value = ''; // Limpiar Cédula si cambia a empresa
+    }
+}
+
+function alternarIdioma() {
+  const btn = document.getElementById("btnIdioma");
+  
+  if (btn.innerText === "ES") {
+    btn.innerText = "EN";
+  } else {
+    btn.innerText = "ES";
+  }
+}
+
+
+========================================
+/app/view/js/cargadores.js ->
+async function guardarEnBaseDeDatos(puntosCarga) {
+    try {
+        const response = await fetch('/app/controller/guardar_cargadores.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(puntosCarga)
+        });
+
+        const resultado = await response.json();
+        if (!resultado.success) {
+            throw new Error(resultado.message || 'Error al guardar en la base de datos');
+        }
+
+        console.log(`Se sincronizaron exitosamente ${puntosCarga.length} Puntos de Carga con la BD.`);
+    } catch (error) {
+        console.error("Fallo al persistir en la base de datos:", error);
+    }
+}
+
+
+async function sincronizarDatos() {
+    const estadoTxt = document.getElementById('estadoSincronizacion');
+    const boton = document.getElementById('btnSincronizar');
+
+    try {
+        boton.disabled = true;
+        estadoTxt.textContent = "Sincronizando con Open Charge Map...";
+        estadoTxt.style.color = "var(--azul)";
+
+        // Llamada a la función principal de cargadores.js
+        const resultado = await obtenerYmapearCargadores();
+
+        estadoTxt.textContent = "¡Sincronización exitosa!";
+        estadoTxt.style.color = "var(--verde)";
+        
+        // Opcional: Recargar el mapa o la página después de un momento para ver los cambios
+        setTimeout(() => {
+            location.reload(); 
+        }, 1500);
+
+    } catch (error) {
+        console.error(error);
+        estadoTxt.textContent = "Error en la sincronización.";
+        estadoTxt.style.color = "var(--rojo)";
+        boton.disabled = false;
+    }
+}
+========================================
+/app/view/js/mapaCargadores.js ->
+// view/js/mapaCargadores.js
+document.addEventListener("DOMContentLoaded", async () => {
+    // 1. Inicializar el mapa centrado en Rocha (o tus coordenadas base)
+    const latInicial = -34.4811;
+    const lngInicial = -54.3333;
+
+    const map = L.map('map').setView([latInicial, lngInicial], 10);
+    // 2. Cargar la capa base de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    try {
+        // 3. Consultar TU endpoint local en lugar de Open Charge Map
+        const response = await fetch('/app/controller/api_puntos.php');
+        const puntos = await response.json();
+
+        if (!Array.isArray(puntos)) {
+            console.error("Los datos recibidos no tienen el formato esperado:", puntos);
+            return;
+        }
+
+        // 4. Recorrer los puntos de carga de la base de datos y pintarlos
+        puntos.forEach(punto => {
+            // Definir color del marcador según el estado de sus cargadores
+            let colorMarcador = '#22c55e'; // Verde (Disponible por defecto)
+
+            if (punto.cargadores && punto.cargadores.length > 0) {
+                punto.cargadores.forEach(c => {
+                    let estadoOp = (c.estadoOperativo || '').toLowerCase();
+                    let estadoUso = (c.estadoUso || '').toLowerCase();
+
+                    if (estadoOp.includes('fuera') || estadoOp.includes('out') || estadoOp.includes('fault')) {
+                        colorMarcador = '#ef4444'; // Rojo (Fuera de servicio)
+                    } else if (estadoUso.includes('uso') || estadoUso.includes('ocupado')) {
+                        colorMarcador = '#f59e0b'; // Amarillo (En uso)
+                    }
+                });
+            }
+
+            // Crear el marcador circular en Leaflet
+            const marker = L.circleMarker([parseFloat(punto.latitud), parseFloat(punto.longitud)], {
+                radius: 8,
+                fillColor: colorMarcador,
+                color: '#ffffff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.9
+            }).addTo(map);
+
+            // Construir el HTML interno del Popup con los conectores de la BD
+            let htmlCargadores = '';
+            if (punto.cargadores && punto.cargadores.length > 0) {
+                punto.cargadores.forEach(c => {
+                    htmlCargadores += `
+                        <div style="border-top: 1px solid #e2e8f0; margin-top: 6px; padding-top: 4px; font-size: 12px;">
+                            <b>Conector:</b> ${c.tipoConector} (${c.potenciaKilowatts} kW)<br>
+                            <b>Tipo:</b> ${c.tipoCargador}<br>
+                            <b>Estado:</b> ${c.estadoOperativo}
+                        </div>
+                    `;
+                });
+            } else {
+                htmlCargadores = '<div style="font-size: 12px; color: #64748b; margin-top: 4px;">Sin cargadores registrados.</div>';
+            }
+
+            // Asignar el popup al marcador
+            marker.bindPopup(`
+                <div style="font-family: 'Inter', sans-serif; min-width: 200px;">
+                    <h4 style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700;">${punto.direccion}</h4>
+                    <p style="margin: 0 0 6px 0; font-size: 12px; color: #64748b;">${punto.ciudadYDepartamento}</p>
+                    <span style="font-size: 11px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${punto.tipoUsuario}</span>
+                    <div style="margin-top: 8px;">
+                        <strong style="font-size: 12px;">Conectores (${punto.cargadores.length}):</strong>
+                        ${htmlCargadores}
+                    </div>
+                </div>
+            `);
+        });
+
+    } catch (error) {
+        console.error("Error al cargar los puntos desde la base de datos:", error);
+    }
+});
+========================================
+/app/view/content/mapa.php ->
+<?php
+    // 1. Cargamos la configuración global
+    require_once __DIR__ . '/../../../config/config.php';
+    
+    // 2. Verificamos la autenticación
+    require_once __DIR__ . "/../../view/inc/auth.php";
+
+    // 3. Incluimos el sistema de idiomas
+    require_once __DIR__ . "/../../view/inc/lang.php";
+    /** @var array $lang */
+?>
+
+<!DOCTYPE html>
+<html lang="<?php echo $idioma_actual; ?>">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?php echo $lang['titulo_mapa'] ?? 'VoltMap — Mapa de Cargadores'; ?></title>
+
+  <!-- Hojas de estilo de la app y Leaflet -->
+  <link rel="stylesheet" href="../../view/css/estilosMapa.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body>
+<!-- Mapa principal -->
+  <div class="sc on" id="s-mapa">
+    <!-- Barra superior de búsqueda -->
+    <div class="mapa-topbar">
+      <div class="mapa-logo">
+        <img src="../../view/img/VoltMap-3.png" alt="Logo de la app">
+      </div>
+      <input class="search-bar" placeholder="<?php echo $lang['buscar_placeholder'] ?? 'Buscar dirección o lugar...'; ?>">
+      <button class="icon-btn" title="<?php echo $lang['filtros_btn'] ?? 'Filtros'; ?>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2">
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="8" y1="12" x2="16" y2="12" />
+          <line x1="10" y1="18" x2="14" y2="18" />
+        </svg>
+      </button>
+      <button class="icon-btn" title="<?php echo $lang['notificaciones_btn'] ?? 'Notificaciones'; ?>">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+      </button>
+      <button class="icon-btn" title="<?php echo $lang['menu_btn'] ?? 'Menu'; ?>" onclick="location.href='/app/controller/controlador_cerrar_sesion.php'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Barra de filtros rápidos -->
+    <div class="filtros-bar">
+      <button class="chip sel" onclick="selChip(this)"><?php echo $lang['chip_todos'] ?? 'Todos'; ?></button>
+      <button class="chip" onclick="selChip(this)"><span class="dot dot-v" style="margin-right:5px"></span><?php echo $lang['chip_disponible'] ?? 'Disponible'; ?></button>
+      <button class="chip" onclick="selChip(this)"><span class="dot dot-a" style="margin-right:5px"></span><?php echo $lang['chip_en_uso'] ?? 'En uso'; ?></button>
+      <button class="chip" onclick="selChip(this)"><span class="dot dot-r" style="margin-right:5px"></span><?php echo $lang['chip_fuera_servicio'] ?? 'Fuera de servicio'; ?></button>
+      <button class="chip" onclick="selChip(this)"><?php echo $lang['chip_mas_filtros'] ?? 'Más filtros'; ?></button>
+    </div>
+
+    <!-- Contenedor del mapa -->
+    <div class="mapa-area">
+      <!-- Aquí se renderiza el mapa leyendo de tu base de datos -->
+      <div id="map"></div>
+
+      <div class="leyenda-mapa">
+        <h5><?php echo $lang['referencias_titulo'] ?? 'Referencias'; ?></h5>
+        <div class="leg-row"><span class="dot dot-v"></span> <?php echo $lang['chip_disponible'] ?? 'Disponible'; ?></div>
+        <div class="leg-row"><span class="dot dot-a"></span> <?php echo $lang['chip_en_uso'] ?? 'En uso'; ?></div>
+        <div class="leg-row"><span class="dot dot-r"></span> <?php echo $lang['chip_fuera_servicio'] ?? 'Fuera de servicio'; ?></div>
+      </div>
+    </div>
+
+    <!-- Menú inferior (Bottom Nav) -->
+    <div class="bottom-nav">
+      <button class="bn on">
+        <svg viewBox="0 0 24 24">
+          <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+        </svg>
+        <?php echo $lang['nav_mapa'] ?? 'Mapa'; ?>
+      </button>
+      <button class="bn" onclick="location.href='reservas.php'">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+        </svg>
+        <?php echo $lang['nav_reservas'] ?? 'Reservas'; ?>
+      </button>
+      <button class="bn-plus-wrap" onclick="location.href='publicar.php'">
+        <div class="bn-plus">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </div>
+        <?php echo $lang['nav_publicar'] ?? 'Publicar'; ?>
+      </button>
+      <button class="bn" onclick="location.href='/app/view/content/perfil.php'">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <?php echo $lang['nav_perfil'] ?? 'Perfil'; ?>
+      </button>
+      <button class="bn" onclick="location.href='vehiculos.php'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="10" rx="2" ry="2" />
+          <path d="M6 7V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" />
+          <path d="M16 17v2a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-2" />
+        </svg>
+        <?php echo $lang['nav_vehiculos'] ?? 'Vehículos'; ?>
+      </button>
+    </div>
+  </div>
+
+  <!-- Librería de Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Lógica para obtener los datos de TU base de datos (mediante api_puntos.php) -->
+  <script src="../../view/js/mapaCargadores.js"></script>
+
+  <!-- Interacción general de la interfaz (chips, menú, etc.) -->
+  <script src="/app/view/js/script.js"></script>
+</body>
+</html>
+========================================
+/app/view/content/mapa_invitado.php ->
+<?php
+    require_once __DIR__ . "/../../view/inc/auth2.php";
+    require_once __DIR__ . "/../../view/inc/lang.php";
+    /** @var array $lang */
+    /** @var string $idioma_actual */
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $idioma_actual; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoltMap - Modo Invitado</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="./../css/estilosMapa.css" />
+    <link rel="stylesheet" href="./../css/estilosInvitados.css" />
+</head>
+<body>
+
+    <!-- Barra superior con el logo pequeño y más espacio libre -->
+    <div class="mapa-topbar">
+        <div class="mapa-logo">
+            <!-- REEMPLAZA "VoltMap-icono.png" por el nombre de tu archivo de logo pequeño -->
+            <img src="../../view/img/VoltMap-ICO.png" alt="Logo VoltMap">
+        </div>
+        <div class="mapa-divider"></div>
+        <div class="search-wrapper">
+            <span class="search-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <input class="search-bar" type="text" placeholder="<?php echo $lang['buscar_placeholder']; ?>">
+        </div>
+        <div class="mapa-divider"></div>
+        <button id="btnIdioma" onclick="cambiarIdioma('<?php echo ($idioma_actual === 'es') ? 'en' : 'es'; ?>')" class="lang-btn-toggle">
+            <?php echo strtoupper($idioma_actual); ?>
+        </button>
+    </div>
+
+    <!-- Banner flotante de invitado -->
+    <div class="guest-banner">
+        <span><?php echo $lang['explorando_invitado']; ?></span>
+        <a href="login.php" class="btn-login"><?php echo $lang['iniciar_sesion']; ?></a>
+    </div>
+
+    <!-- Contenedor del Mapa -->
+    <div id="map"></div>
+
+    <!-- Scripts necesarios -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../../view/js/mapaCargadores.js"></script>
+    <script>
+        function cambiarIdioma(nuevoLang) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', nuevoLang);
+            window.location.href = url.toString();
+        }
+    </script>
+</body>
+</html>
+========================================
+/app/view/content/login.php ->
+<?php
+    require_once __DIR__ . "/../../view/inc/auth2.php";
+    require_once __DIR__ . "/../../view/inc/lang.php"; // <--- Incluir el gestor de idiomas
+    /** @var array $lang */
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $idioma_actual; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - VoltMap</title>
+    <link rel="stylesheet" href="../../view/css/estilosLogin.css"></head>
+<body>
+    <div class="sc on" id="s-login" style="align-items:center;justify-content:center;background:var(--fondo)">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="../../view/img/VoltMap-3.png" alt="Logo de la app">
+            </div>
+            <h2 class="card-titulo"><?php echo $lang['bienvenida']; ?></h2>
+            <p class="card-sub"><?php echo $lang['sub_login']; ?></p>
+
+            <form method="POST" action="">
+                <?php include_once __DIR__ . '/../../controller/controlador_login.php'; ?>
+
+                <div class="campo">
+                    <label for="usuario"><?php echo $lang['usuario_lbl']; ?></label>
+                    <input type="text" id="usuario" name="usuario" class="campo-input" required>
+                </div>
+
+                <div class="campo">
+                    <label for="password"><?php echo $lang['pass_lbl']; ?></label>
+                    <input type="password" id="password" name="password" class="campo-input" required>
+                </div>
+
+                <button type="submit" name="btningresar" value="1" class="btn-full btn-azul">
+                    <?php echo $lang['btn_ingresar']; ?>
+                </button>
+            </form>
+            
+            <p class="link-row"><?php echo $lang['no_cuenta']; ?> <a onclick="location.href='registro.php'"><?php echo $lang['registrate']; ?></a></p>
+
+            <div class="iconos-login">
+                <div class="ico-feat">
+                    <!-- Botón para alternar idioma recargando la página con el parámetro GET -->
+                    <button id="btnIdioma" onclick="cambiarIdioma('<?php echo ($idioma_actual === 'es') ? 'en' : 'es'; ?>')" class="btn-out">
+                        <?php echo strtoupper($idioma_actual); ?>
+                    </button>
+                </div>
+            </div>
+            <div style="margin-top: 15px; text-align: center;">
+                    <a href="mapa_invitado.php" style="color: #4b5563; text-decoration: none; font-size: 14px;"> Continuar como invitado (Ver mapa) </a>
+                </div>
+        </div>
+    </div>
+    <script>
+        function cambiarIdioma(nuevoLang) {
+            // Recarga la página actual agregando el parámetro ?lang=en o ?lang=es
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', nuevoLang);
+            window.location.href = url.toString();
+        }
+    </script>
+</body>
+</html>
+========================================
+/app/view/content/registro.php ->
+<?php
+    require_once __DIR__ . "/../../view/inc/auth2.php";
+    require_once __DIR__ . "/../../view/inc/lang.php";
+    /** @var array $lang */
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $idioma_actual; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $lang['crear_cuenta']; ?> - VoltMap</title>
+    <link rel="stylesheet" href="../css/estilosRegistro.css">
+</head>
+<body>
+
+<div class="sc on" id="s-registro" style="align-items:center;justify-content:center;overflow-y:auto;background:var(--fondo)">
+    <div class="reg-card">
+      <div class="login-logo">
+        <img src="../img/VoltMap-3.png" alt="Logo de la app">
+      </div>
+      <h2 class="card-titulo"><?php echo $lang['crear_cuenta']; ?></h2>
+      <p class="card-sub"><?php echo $lang['sub_registro']; ?></p>
+
+      <form method="POST" action="">
+          <?php include_once __DIR__ . '/../../controller/controlador_registro.php'; ?>
+
+          <!-- Campo oculto o manejo del tipo de usuario si lo requiere tu controlador -->
+          <input type="hidden" id="tipo_usuario" name="tipo_usuario" value="part">
+
+          <div class="tipo-usuario">
+            <button type="button" class="tipo-btn on" onclick="selTipo(this,'part')"><?php echo $lang['particular']; ?></button>
+            <button type="button" class="tipo-btn" onclick="selTipo(this,'emp')"><?php echo $lang['empresa']; ?></button>
+          </div>
+
+          <div class="campo">
+              <label for="nombre"><?php echo $lang['nombre_completo']; ?></label>
+              <input type="text" id="nombre" name="nombre" placeholder="Ej. Juan Perez" required>
+          </div>
+
+          <div class="campo" id="r-ci">
+              <label for="cedula"><?php echo $lang['cedula']; ?></label>
+              <input type="text" id="cedula" name="cedula" placeholder="Ej. 4.123.456-7">
+          </div>
+
+          <div class="campo" id="r-rut" style="display:none">
+              <label for="rut"><?php echo $lang['rut']; ?></label>
+              <input type="text" id="rut" name="rut" placeholder="Ej. 21 000000 0001">
+          </div>
+
+          <div class="campo">
+              <label for="correo"><?php echo $lang['correo']; ?></label>
+              <input type="email" id="correo" name="correo" placeholder="Ej. juan@correo.com" required>
+          </div>
+
+          <div class="campo">
+              <label for="password"><?php echo $lang['pass_lbl']; ?></label>
+              <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" required>
+          </div>
+
+          <div class="campo">
+              <label for="confirm_password"><?php echo $lang['confirm_pass']; ?></label>
+              <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetí tu contraseña" required>
+          </div>
+
+          <div class="check-row">
+            <input type="checkbox" id="tos" name="tos" required>
+            <label for="tos" style="color:var(--sub);font-weight:400;margin:0"><?php echo $lang['terminos']; ?></label>
+          </div>
+
+          <button type="submit" name="btnregistrar" value="1" class="btn-full btn-azul"><?php echo $lang['btn_registrar']; ?></button>
+      </form>
+
+      <p class="link-row" style="margin-top:12px"><?php echo $lang['ya_cuenta']; ?> <a onclick="location.href='login.php'"><?php echo $lang['iniciar_sesion']; ?></a></p>
+
+      <div class="iconos-login" style="margin-top: 15px; display: flex; justify-content: center;">
+          <div class="ico-feat">
+              <button id="btnIdioma" onclick="cambiarIdioma('<?php echo ($idioma_actual === 'es') ? 'en' : 'es'; ?>')" class="btn-out" style="padding: 6px 12px; cursor: pointer;">
+                  <?php echo strtoupper($idioma_actual); ?>
+              </button>
+          </div>
+      </div>
+    </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script>
+    function cambiarIdioma(nuevoLang) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', nuevoLang);
+        window.location.href = url.toString();
+    }
+</script>
+</body>
+</html>
+========================================
+/app/view/content/perfil.php ->
+<?php
+    require_once __DIR__ . "/../../view/inc/auth.php"; // Archivo que protege la sesión privada
+    require_once __DIR__ . "/../../view/inc/lang.php"; 
+    /** @var array $lang */
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $idioma_actual; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $lang['mi_perfil'] ?? 'Mi Perfil'; ?> - VoltMap</title>
+    <link rel="stylesheet" href="../../view/css/estilosPerfil.css">
+</head>
+<body>
+    <div class="sc on" id="s-perfil">
+        <div class="perfil-container">
+            
+            <!-- Botón de Volver al Mapa -->
+            <div style="margin-bottom: 15px;">
+                <a href="mapa.php" class="btn-volver">
+                    ← <?php echo $lang['volver_mapa'] ?? 'Volver al Mapa'; ?>
+                </a>
+            </div>
+
+            <div class="perfil-header-info">
+                <h1><?php echo $lang['mi_perfil'] ?? 'Mi Perfil'; ?></h1>
+                <p><?php echo $lang['sub_perfil'] ?? 'Administra tu información personal y credenciales'; ?></p>
+            </div>
+
+            <!-- Incluir el controlador que procesa la actualización y define las alertas -->
+            <?php include_once __DIR__ . '/../../controller/controlador_perfil.php'; ?>
+
+            <?php if (!empty($mensaje)): ?>
+                <div class="perfil-alert <?php echo $tipoAlerta; ?>">
+                    <?php echo $mensaje; ?>
+                </div>
+            <?php endif; ?>
+
+
+            <div class="perfil-grid">
+                
+                <!-- Formulario de edición -->
+                <div class="perfil-card">
+                    <form method="POST" action="">
+                        <div class="perfil-section-title">
+                            <?php echo $lang['info_personal'] ?? 'Información Personal'; ?>
+                        </div>
+
+                        <div class="perfil-form-row">
+                            <div class="campo">
+                                <label><?php echo $lang['nombre_lbl'] ?? 'Nombre'; ?></label>
+                                <input type="text" name="nombre" value="<?php echo htmlspecialchars($datosUsuario['nombre'] ?? ''); ?>" required>
+                            </div>
+                            <div class="campo">
+                                <label><?php echo $lang['seudonimo_lbl'] ?? 'Seudónimo'; ?></label>
+                                <input type="text" name="seudonimo" value="<?php echo htmlspecialchars($datosUsuario['seudonimo'] ?? ''); ?>">
+                            </div>
+                        </div>
+
+                        <div class="perfil-form-row">
+                            <div class="campo">
+                                <label><?php echo $lang['correo_lbl'] ?? 'Correo Electrónico'; ?></label>
+                                <input type="email" name="correo" value="<?php echo htmlspecialchars($datosUsuario['correo'] ?? ''); ?>" required>
+                            </div>
+                            <div class="campo">
+                                <label><?php echo $lang['cedula_rut_lbl'] ?? 'Cédula / RUT'; ?></label>
+                                <input type="text" value="<?php echo htmlspecialchars($datosUsuario['cedula_identidad'] ?? $datosUsuario['rut'] ?? ''); ?>" disabled class="campo-disabled">
+                            </div>
+                        </div>
+
+                        <div class="perfil-divider"></div>
+
+                        <div class="perfil-section-title">
+                            <?php echo $lang['cambiar_pass'] ?? 'Cambiar Contraseña (Opcional)'; ?>
+                        </div>
+
+                        <div class="perfil-form-row">
+                            <div class="campo">
+                                <label><?php echo $lang['nueva_pass_lbl'] ?? 'Nueva Contraseña'; ?></label>
+                                <input type="password" name="nueva_password" placeholder="••••••••" autocomplete="new-password">
+                            </div>
+                            <div class="campo">
+                                <label><?php echo $lang['confirmar_pass_lbl'] ?? 'Confirmar Contraseña'; ?></label>
+                                <input type="password" name="confirmar_password" placeholder="••••••••" autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 24px;">
+                            <button type="submit" name="btnactualizar" value="1" class="btn-full btn-azul" style="flex: 1;">
+                                <?php echo $lang['btn_guardar'] ?? 'Guardar Cambios'; ?>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tarjeta lateral de resumen de cuenta -->
+                <div class="perfil-sidebar">
+                    <div class="perfil-avatar">
+                        <?php echo strtoupper(substr($datosUsuario['nombre'] ?? 'U', 0, 2)); ?>
+                    </div>
+                    <h3><?php echo htmlspecialchars($datosUsuario['nombre'] ?? ''); ?></h3>
+                    <p class="perfil-tipo-usuario"><?php echo htmlspecialchars($datosUsuario['tipo_usuario'] ?? 'Usuario'); ?></p>
+                    
+                    <span class="perfil-badge-activo">
+                        <span class="punto-verde"></span> 
+                        <?php echo htmlspecialchars($datosUsuario['estado'] ?? 'Activo'); ?>
+                    </span>
+
+                    <div class="perfil-id-box">
+                        <p><strong>ID de Usuario:</strong> #<?php echo $datosUsuario['id'] ?? ''; ?></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+========================================
+/app/view/css/estilosInvitados.css ->
+:root {
+  --azul: #1B3A6B;
+  --azul2: #1D4ED8;
+  --fondo: #F1F5F9;
+  --blanco: #FFFFFF;
+  --borde: #CBD5E1;
+  --txt: #0F172A;
+  --sub: #64748B;
+  --sh2: 0 4px 18px rgba(0, 0, 0, .14);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--txt);
+  background: var(--fondo);
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Contenedor principal del mapa ocupando toda la pantalla */
+#map {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* Barra superior optimizada: con margen izquierdo para no solapar los controles de zoom de Leaflet */
+.mapa-topbar {
+  position: absolute;
+  top: 12px;
+  left: 55px; /* Margen de seguridad para que no choque con los botones de zoom del mapa */
+  right: 12px; 
+  width: auto;
+  max-width: 580px; 
+  margin: 0; 
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  background: var(--blanco);
+  padding: 8px 12px;
+  border-radius: 12px;
+  box-shadow: var(--sh2);
+  gap: 10px;
+}
+
+.mapa-logo img {
+  height: 28px; /* Tamaño proporcionado para el logo pequeño */
+  width: auto;
+  display: block;
+}
+
+/* Líneas separadoras sutiles */
+.mapa-divider {
+  width: 1px;
+  height: 22px;
+  background-color: var(--borde);
+  flex-shrink: 0;
+}
+
+/* Contenedor interno del input y la lupa */
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 8px;
+  min-width: 0; /* Impide que el input rompa el flexbox */
+}
+
+.search-icon {
+  color: var(--sub);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.search-bar {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px; /* Tamaño cómodo para lectura y escritura */
+  color: var(--txt);
+  background: transparent;
+  font-family: inherit;
+  padding: 4px 0;
+  min-width: 0; 
+}
+
+.search-bar::placeholder {
+  color: #94a3b8;
+}
+
+/* Botón de cambio de idioma compacto y alineado */
+.lang-btn-toggle {
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  color: var(--txt);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.lang-btn-toggle:hover {
+  background: var(--borde);
+}
+
+/* Banner flotante de invitado en la parte inferior (móviles) */
+.guest-banner {
+  position: absolute;
+  bottom: 20px;
+  left: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: var(--blanco);
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: var(--sh2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.btn-login {
+  background: var(--azul2);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+
+.btn-login:hover {
+  background: #1e40af;
+}
+
+/* Ajustes responsivos para tablets y escritorio (min-width: 768px) */
+@media (min-width: 768px) {
+  .mapa-topbar {
+    top: 20px;
+    left: 65px; /* Margen izquierdo seguro para los controles de zoom en PC */
+    right: auto;
+    width: 520px;
+    max-width: none;
+    margin: 0;
+    padding: 10px 16px;
+    gap: 12px;
+  }
+
+  .mapa-logo img {
+    height: 34px;
+  }
+
+  .mapa-divider {
+    height: 26px;
+  }
+
+  .search-bar {
+    font-size: 14px;
+  }
+
+  .lang-btn-toggle {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .guest-banner {
+    top: 20px;
+    left: auto;
+    right: 20px;
+    bottom: auto;
+    width: auto;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .btn-login {
+    padding: 9px 16px;
+    font-size: 14px;
+  }
+}
+========================================
+/app/view/css/estilosPerfil.css ->
+/* Estilos específicos y autónomos para la vista de Perfil */
+#s-perfil {
+    overflow-y: auto;
+    background: var(--fondo, #f8fafc);
+    padding: 30px 20px;
+    min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
+}
+
+#s-perfil * {
+    box-sizing: border-box;
+}
+
+.perfil-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.perfil-header-info {
+    margin-bottom: 20px;
+}
+
+.perfil-header-info h1 {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--txt, #0f172a);
+    margin: 0 0 4px 0;
+}
+
+.perfil-header-info p {
+    color: var(--sub, #64748b);
+    font-size: 14px;
+    margin: 0;
+}
+
+.btn-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid var(--borde, #cbd5e1);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--txt, #0f172a);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: background 0.2s ease;
+}
+
+.btn-volver:hover {
+    background: #f1f5f9;
+}
+
+.perfil-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 20px;
+}
+
+.perfil-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.perfil-section-title {
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--borde, #e2e8f0);
+    color: var(--txt, #0f172a);
+}
+
+.perfil-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--txt, #1e293b);
+}
+
+.campo input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--borde, #cbd5e1);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.campo input:focus {
+    border-color: var(--azul, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.campo-disabled {
+    background: #f8fafc !important;
+    color: var(--sub, #64748b) !important;
+    cursor: not-allowed;
+}
+
+.perfil-divider {
+    height: 1px;
+    background: var(--borde, #e2e8f0);
+    margin: 20px 0;
+}
+
+/* Botones de acción */
+.btn-full {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+}
+
+.btn-azul {
+    background: var(--azul, #2563eb);
+    color: #fff;
+}
+
+.btn-azul:hover {
+    background: #1d4ed8;
+}
+
+/* Alertas de Perfil */
+.perfil-alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid transparent;
+}
+
+.perfil-alert.danger {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    border-color: #f5c6cb !important;
+}
+
+.perfil-alert.success {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+    border-color: #c3e6cb !important;
+}
+
+.perfil-alert.warning {
+    background-color: #fff3cd !important;
+    color: #856404 !important;
+    border-color: #ffeeba !important;
+}
+
+/* Barra lateral de perfil */
+.perfil-sidebar {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    height: fit-content;
+}
+
+.perfil-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--azul, #2563eb);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0 auto 12px;
+}
+
+.perfil-sidebar h3 {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 2px;
+    color: var(--txt, #0f172a);
+}
+
+.perfil-tipo-usuario {
+    font-size: 12px;
+    color: var(--sub, #64748b);
+    margin-bottom: 14px;
+    text-transform: capitalize;
+}
+
+.perfil-badge-activo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #dcfce7;
+    color: #15803d;
+    margin-bottom: 16px;
+}
+
+.punto-verde {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--verde, #22c55e);
+}
+
+.perfil-id-box {
+    text-align: left;
+    background: var(--fondo, #f1f5f9);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--sub, #64748b);
+}
+
+@media (max-width: 768px) {
+    .perfil-grid {
+        grid-template-columns: 1fr;
+    }
+    .perfil-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+========================================
+/app/view/css/estilosMapa.css ->
+:root {
+  --azul: #1B3A6B;
+  --azul2: #1D4ED8;
+  --verde: #16A34A;
+  --rojo: #DC2626;
+  --ambar: #D97706;
+  --fondo: #F1F5F9;
+  --blanco: #FFFFFF;
+  --borde: #CBD5E1;
+  --txt: #0F172A;
+  --sub: #64748B;
+  --sh: 0 1px 6px rgba(0, 0, 0, .1);
+  --sh2: 0 4px 18px rgba(0, 0, 0, .14);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--txt);
+  background: var(--fondo);
+}
+
+button, a {
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+.sc {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.sc.on {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-azul {
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  width: 100%;
+}
+
+.btn-out {
+  background: transparent;
+  color: var(--azul);
+  border: 2px solid var(--azul);
+  border-radius: 6px;
+  padding: 9px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  width: 100%;
+}
+
+.campo {
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.campo label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sub);
+  margin-bottom: 4px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--txt);
+  background: #fff;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--azul2);
+}
+
+.chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--borde);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--sub);
+  flex-shrink: 0;
+}
+
+.chip.sel {
+  background: var(--azul);
+  color: #fff;
+  border-color: var(--azul);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-v { background: var(--verde); }
+.dot-a { background: var(--ambar); }
+.dot-r { background: var(--rojo); }
+
+#s-mapa {
+  background: #fff;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.mapa-topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--borde);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  box-shadow: var(--sh);
+  z-index: 10;
+  width: 100%;
+}
+
+.mapa-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mapa-logo img {
+  height: 28px;
+}
+
+.search-bar {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--txt);
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: var(--azul2);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1.5px solid var(--borde);
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.filtros-bar {
+  padding: 8px 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid var(--borde);
+  overflow-x: auto;
+  flex-shrink: 0;
+  background: #fff;
+  z-index: 10;
+  width: 100%;
+  scrollbar-width: none;
+}
+
+.filtros-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.mapa-area {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.leyenda-mapa {
+  position: absolute;
+  bottom: 20px;
+  left: 16px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: var(--sh2);
+  border: 1px solid var(--borde);
+  font-size: 12px;
+  pointer-events: auto;
+}
+
+.leyenda-mapa h5 {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--sub);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 6px;
+}
+
+.leg-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+  color: var(--txt);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.leg-row:last-child {
+  margin-bottom: 0;
+}
+
+.bottom-nav {
+  background: #fff;
+  border-top: 1px solid var(--borde);
+  display: flex;
+  height: 60px;
+  flex-shrink: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.bn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--sub);
+  font-weight: 600;
+  border: none;
+  background: none;
+}
+
+.bn.on {
+  color: var(--azul);
+}
+
+.bn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.bn-plus-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 11px;
+  color: var(--sub);
+  font-weight: 600;
+  border: none;
+  background: none;
+  position: relative;
+}
+
+.bn-plus {
+  width: 42px;
+  height: 42px;
+  background: var(--azul);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -14px;
+  box-shadow: 0 3px 8px rgba(27, 58, 107, .4);
+}
+
+#s-login, #s-registro {
+  background: var(--fondo);
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.login-card, .reg-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--sh2);
+  margin: auto;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.login-logo img {
+  height: 40px;
+}
+
+.card-titulo {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.card-sub {
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.link-row {
+  font-size: 13px;
+  color: var(--sub);
+  text-align: center;
+  margin-top: 14px;
+}
+
+.link-row a {
+  color: var(--azul2);
+  font-weight: 700;
+}
+
+
+@media (max-width: 768px) {
+  .leyenda-mapa {
+    bottom: 70px; 
+  }
+  .bottom-nav {
+    position: fixed;
+    bottom: 0px;
+  }
+}
+========================================
+/app/view/css/estilosLogin.css ->
+:root {
+  --azul: #1B3A6B;
+  --azul2: #1D4ED8;
+  --verde: #16A34A;
+  --fondo: #F1F5F9;
+  --blanco: #FFFFFF;
+  --borde: #CBD5E1;
+  --txt: #0F172A;
+  --sub: #64748B;
+  --sh2: 0 4px 18px rgba(0, 0, 0, .14);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;  color: var(--txt);
+  background: var(--fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+button {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
+  cursor: pointer;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-azul {
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  display: block;
+  width: 100%;
+}
+
+.btn-out {
+  background: transparent;
+  color: var(--azul);
+  border: 2px solid var(--azul);
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.campo {
+  margin-bottom: 14px;
+}
+
+.campo label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sub);
+  margin-bottom: 4px;
+}
+
+.campo input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
+  color: var(--txt);
+  background: #fff;
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: var(--azul2);
+}
+
+.campo input::placeholder {
+  color: #94a3b8;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 32px;
+  width: 380px;
+  box-shadow: var(--sh2);
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  justify-content: center;
+}
+
+.login-logo img {
+  height: 44px;
+}
+
+.card-titulo {
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.card-sub {
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 20px;
+}
+
+.link-row {
+  font-size: 13px;
+  color: var(--sub);
+  text-align: center;
+  margin-top: 14px;
+}
+
+.link-row a {
+  color: var(--azul2);
+  font-weight: 700;
+}
+
+.iconos-login {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid var(--borde);
+}
+========================================
+/app/view/css/estilosRegistro.css ->
+:root {
+  --azul: #1B3A6B;
+  --azul2: #1D4ED8;
+  --verde: #16A34A;
+  --rojo: #DC2626;
+  --ambar: #D97706;
+  --fondo: #F1F5F9;
+  --blanco: #FFFFFF;
+  --borde: #CBD5E1;
+  --txt: #0F172A;
+  --sub: #64748B;
+  --sh: 0 1px 6px rgba(0, 0, 0, .1);
+  --sh2: 0 4px 18px rgba(0, 0, 0, .14);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;    box-sizing: border-box;
+  color: var(--txt);
+  background: var(--fondo);
+}
+
+/* PANTALLAS */
+.sc {
+  display: none;
+  position: absolute;
+  inset: 0;
+}
+
+.sc.on {
+  display: flex;
+  flex-direction: column;
+}
+
+/* COMUNES */
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a {
+  cursor: pointer;
+}
+
+.btn-azul {
+  background: var(--azul);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.btn-out {
+  background: transparent;
+  color: var(--azul);
+  border: 2px solid var(--azul);
+  border-radius: 6px;
+  padding: 9px 22px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.btn-verde {
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.btn-full {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+}
+
+.campo {
+  margin-bottom: 14px;
+}
+
+.campo label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--sub);
+  margin-bottom: 4px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--borde);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--txt);
+  background: #fff;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  outline: none;
+  border-color: var(--azul2);
+}
+
+.campo input::placeholder {
+  color: #94a3b8;
+}
+
+.chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--borde);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--sub);
+}
+
+.chip.sel {
+  background: var(--azul);
+  color: #fff;
+  border-color: var(--azul);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-v {
+  background: var(--verde);
+}
+
+.dot-a {
+  background: var(--ambar);
+}
+
+.dot-r {
+  background: var(--rojo);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge-v {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badge-a {
+  background: #fef9c3;
+  color: #a16207;
+}
+
+.badge-r {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.divider {
+  height: 1px;
+  background: var(--borde);
+  margin: 12px 0;
+}
+
+.logo-v {
+  color: var(--azul);
+}
+
+.logo-m {
+  color: var(--verde);
+}
+
+
+
+/* PANTALLA PRINCIPAL */
+#s-landing {
+  overflow-y: auto;
+  height: 100vh;
+  background: #fff;
+}
+
+.nav-top {
+  background: #fff;
+  border-bottom: 1px solid var(--borde);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 60px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.logo img {
+  height: 34px;
+}
+
+.logo-txt {
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+}
+
+.nav-links a {
+  font-size: 14px;
+  color: var(--sub);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: var(--azul);
+}
+
+.hero {
+  padding: 60px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 60px - 82px);
+  align-items: center;
+  gap: 48px;
+}
+
+.hero-titulo {
+  font-size: 38px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.hero-titulo span {
+  color: var(--azul2);
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--sub);
+  margin-bottom: 28px;
+  line-height: 1.65;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 12px;
+}
+
+.hero-img {
+  background: var(--fondo);
+  border-radius: 12px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--sub);
+  font-size: 13px;
+  border: 2px dashed var(--borde);
+}
+
+.features-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--borde);
+  padding: 0 40px;
+}
+
+.feat {
+  padding: 28px 20px;
+  border-right: 1px solid var(--borde);
+}
+
+.feat:last-child {
+  border-right: none;
+}
+
+.feat-ico {
+  width: 38px;
+  height: 38px;
+  background: #eff6ff;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feat h3 {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.feat p {
+  font-size: 13px;
+  color: var(--sub);
+  line-height: 1.55;
+}
+
+.footer-bar {
+  background: var(--azul);
+  color: rgba(255, 255, 255, .75);
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-logo img {
+  height: 26px;
+}
+
+.footer-logo span {
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+/* LOGIN */
+#s-login {
+  background: var(--fondo);
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 32px;
+  width: 380px;
+  box-shadow: var(--sh2);
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  justify-content: center;
+}
+
+.login-logo img {
+  height: 44px;
+}
+
+.card-titulo {
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.card-sub {
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 20px;
+}
+
+.link-row {
+  font-size: 13px;
+  color: var(--sub);
+  text-align: center;
+  margin-top: 14px;
+}
+
+.link-row a {
+  color: var(--azul2);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.forgot {
+  font-size: 12px;
+  color: var(--azul2);
+  text-align: right;
+  margin-top: -8px;
+  margin-bottom: 14px;
+}
+
+.iconos-login {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid var(--borde);
+}
+
+.ico-feat {
+  text-align: center;
+}
+
+.ico-feat .ico-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 6px;
+}
+
+.ico-feat span {
+  font-size: 11px;
+  color: var(--sub);
+  font-weight: 600;
+}
+
+/* REGISTRO */
+#s-registro {
+  background: var(--fondo);
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.reg-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 32px;
+  width: 420px;
+  box-shadow: var(--sh2);
+  margin: 24px 0;
+}
+
+.tipo-usuario {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.tipo-btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid var(--borde);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tipo-btn.on {
+  border-color: var(--azul);
+  background: #eff6ff;
+  color: var(--azul);
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.check-row input[type=checkbox] {
+  width: auto;
+}
+
+.check-row a {
+  color: var(--azul2);
+}
+
+========================================
+/app/view/inc/auth.php ->
+<?php
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (empty($_SESSION["id"])) {
+    header("Location: /app/view/content/login.php");
+    exit();
+}
+?>
+========================================
+/app/view/inc/lang.php ->
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si el usuario hace clic para cambiar idioma vía GET (ej: ?lang=en)
+if (isset($_GET['lang'])) {
+    if ($_GET['lang'] === 'en' || $_GET['lang'] === 'es') {
+        $_SESSION['lang'] = $_GET['lang'];
+    }
+}
+
+// Idioma por defecto: español si no está definido
+$idioma_actual = $_SESSION['lang'] ?? 'es';
+
+// Cargar el archivo correspondiente
+require_once __DIR__ . "/../../lang/{$idioma_actual}.php";
+========================================
+/app/view/inc/auth2.php ->
+<?php
+session_start();
+if (isset($_SESSION["id"])) {
+    header("Location: mapa.php");
+    exit();
+}
+
+?>
+========================================
+/app/view/inc/cron_sync.php ->
+<?php
+// C:\xampp\htdocs\app\view\inc\cron_sync.php
+
+
+require_once __DIR__ . '/../../model/conexion.php';
+require_once __DIR__ . '/../../service/SyncOpenChargeMap.php';
+
+$resultado = sincronizarCargadoresOCM($conexion);
+
+if ($resultado) {
+    echo "[" . date('Y-m-d H:i:s') . "] Sincronización exitosa con OCM.\n";
+} else {
+    echo "[" . date('Y-m-d H:i:s') . "] Error al sincronizar con OCM.\n";
+}
+========================================
+/app/controller/controlador_login.php ->
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once __DIR__ . '/../model/conexion.php';
+require_once __DIR__ . '/../model/usuario.php';
+require_once __DIR__ . '/../model/usuarioParticular.php';
+require_once __DIR__ . '/../model/usuarioEmpresa.php';
+require_once __DIR__ . '/../model/moderador.php';
+require_once __DIR__ . '/../model/administrador.php';
+    
+if (!empty($_POST["btningresar"])) {
+    if (!empty($_POST["usuario"]) && !empty($_POST["password"])) {
+        
+        $usuario  = trim($_POST["usuario"]); // Puede ser correo, cédula o RUT
+        $password = trim($_POST["password"]);
+
+        // Corregido: se usa 'cedula_identidad' en lugar de 'cedula' y seleccionamos todos los campos
+        $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE correo = ? OR cedula_identidad = ? OR rut = ?");
+        $stmt->bind_param("sss", $usuario, $usuario, $usuario);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+
+        if ($datos = $resultado->fetch_assoc()) {
+            if (password_verify($password, $datos['password'])) {
+                
+                // Instanciar la clase correcta según el rol del usuario (Programación Orientada a Objetos)
+                $usuarioObj = null;
+                switch ($datos['tipo_usuario']) {
+                    case 'particular':
+                        $usuarioObj = new UsuarioParticular(
+                            $datos['id'], $datos['correo'], $datos['nombre'], 
+                            $datos['password'], $datos['seudonimo'], $datos['foto_perfil'], 
+                            $datos['estado'], $datos['cedula_identidad'], $datos['foto_cedula']
+                        );
+                        break;
+                    case 'empresa':
+                        $usuarioObj = new UsuarioEmpresa(
+                            $datos['id'], $datos['correo'], $datos['nombre'], 
+                            $datos['password'], $datos['seudonimo'], $datos['foto_perfil'], 
+                            $datos['estado'], $datos['rut']
+                        );
+                        break;
+                    case 'moderador':
+                        $usuarioObj = new Moderador(
+                            $datos['id'], $datos['correo'], $datos['nombre'], 
+                            $datos['password'], $datos['seudonimo'], $datos['foto_perfil'], 
+                            $datos['estado']
+                        );
+                        break;
+                    case 'administrador':
+                        $usuarioObj = new Administrador(
+                            $datos['id'], $datos['correo'], $datos['nombre'], 
+                            $datos['password'], $datos['seudonimo'], $datos['foto_perfil'], 
+                            $datos['estado']
+                        );
+                        break;
+                }
+
+                // Guardar los datos esenciales en la sesión
+                $_SESSION["id"] = $datos['id'];
+                $_SESSION["usuario"] = $datos['nombre'];
+                $_SESSION["correo"] = $datos['correo'];
+                $_SESSION["tipo_usuario"] = $datos['tipo_usuario'];
+                
+                // Opcional: Si quieres guardar el objeto completo en la sesión
+                // $_SESSION["usuario_obj"] = $usuarioObj;
+
+                echo '<script>window.location.href = "/app/view/content/mapa.php";</script>';
+                exit();
+            } else {
+                echo "<div class='alert alert-danger' style='color: red; margin-bottom: 10px;'>Contraseña incorrecta.</div>";
+            }
+        } else {
+            echo "<div class='alert alert-danger' style='color: red; margin-bottom: 10px;'>El usuario, correo, cédula o RUT no están registrados.</div>";
+        }
+
+        $stmt->close();
+    } else {
+        echo "<div class='alert alert-warning' style='color: orange; margin-bottom: 10px;'>Por favor completa todos los campos.</div>";
+    }
+}
+?>
+========================================
+/app/controller/guardar_cargadores.php ->
+<?php
+header('Content-Type: application/json');
+require_once __DIR__ . '/../model/conexion.php'; 
+
+// 1. Leer el JSON enviado por fetch desde JavaScript
+$inputJSON = file_get_contents('php://input');
+$puntosCarga = json_decode($inputJSON, true);
+
+if (!$puntosCarga || !is_array($puntosCarga)) {
+    echo json_encode(['success' => false, 'message' => 'Datos inválidos o vacíos.']);
+    exit;
+}
+
+$conexion->begin_transaction();
+
+try {
+    foreach ($puntosCarga as $punto) {
+        $id = $punto['id'];
+        $visible = $punto['visible'] ? 1 : 0;
+        $tipoUsuario = $punto['tipoUsuario'];
+        $latitud = $punto['latitud'];
+        $longitud = $punto['longitud'];
+        $direccion = $punto['direccion'];
+        $ciudadYDepartamento = $punto['ciudadYDepartamento'];
+
+        // 2. Insertar o actualizar el Punto de Carga (upsert usando MySQL)
+        $sqlPunto = "INSERT INTO puntos_carga (id, visible, tipoUsuario, latitud, longitud, direccion, ciudadYDepartamento) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?) 
+                     ON DUPLICATE KEY UPDATE 
+                     visible = VALUES(visible), 
+                     tipoUsuario = VALUES(tipoUsuario), 
+                     latitud = VALUES(latitud), 
+                     longitud = VALUES(longitud), 
+                     direccion = VALUES(direccion), 
+                     ciudadYDepartamento = VALUES(ciudadYDepartamento)";
+        
+        $stmtPunto = $conexion->prepare($sqlPunto);
+        $stmtPunto->bind_param("iissdss", $id, $visible, $tipoUsuario, $latitud, $longitud, $direccion, $ciudadYDepartamento);
+        $stmtPunto->execute();
+        $stmtPunto->close();
+
+        // 3. Procesar y guardar los cargadores (conectores) asociados
+        if (!empty($punto['cargadores'])) {
+            foreach ($punto['cargadores'] as $cargador) {
+                $cId = $cargador['id'];
+                $idPunto = $cargador['idPuntoCarga'];
+                $potencia = $cargador['potenciaKilowatts'];
+                $tConector = $cargador['tipoConector'];
+                $tCargador = $cargador['tipoCargador'];
+                $eUso = $cargador['estadoUso'];
+                $eOp = $cargador['estadoOperativo'];
+                $pKwh = $cargador['precioKwh'];
+                $pHora = $cargador['precioHora'];
+
+                $sqlCargador = "INSERT INTO cargadores (id, idPuntoCarga, potenciaKilowatts, tipoConector, tipoCargador, estadoUso, estadoOperativo, precioKwh, precioHora) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+                                ON DUPLICATE KEY UPDATE 
+                                potenciaKilowatts = VALUES(potenciaKilowatts), 
+                                tipoConector = VALUES(tipoConector), 
+                                tipoCargador = VALUES(tipoCargador), 
+                                estadoUso = VALUES(estadoUso), 
+                                estadoOperativo = VALUES(estadoOperativo), 
+                                precioKwh = VALUES(precioKwh), 
+                                precioHora = VALUES(precioHora)";
+
+                $stmtCargador = $conexion->prepare($sqlCargador);
+                $stmtCargador->bind_param("sidsdssdd", $cId, $idPunto, $potencia, $tConector, $tCargador, $eUso, $eOp, $pKwh, $pHora);
+                $stmtCargador->execute();
+                $stmtCargador->close();
+            }
+        }
+    }
+
+    // Confirmar transacción en la base de datos
+    $conexion->commit();
+    echo json_encode(['success' => true, 'message' => 'Datos sincronizados correctamente.']);
+
+} catch (Exception $e) {
+    // Revertir cambios si algo falla
+    $conexion->rollback();
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+}
+?>
+========================================
+/app/controller/controlador_cerrar_sesion.php ->
+<?php
+session_start();
+
+session_unset();
+
+session_destroy();
+
+header("Location: /app/view/content/login.php");
+exit();
+?>
+========================================
+/app/controller/api_puntos.php ->
+<?php
+error_reporting(0);
+error_reporting(E_ALL);
+header('Content-Type: application/json');
+
+require_once __DIR__ . '/../model/conexion.php';
+
+$method = $_SERVER['REQUEST_METHOD'];
+
+// A. GUARDAR PUNTOS Y CARGADORES (POST)
+if ($method === 'POST') {
+    $input = file_get_contents('php://input');
+    $puntosCarga = json_decode($input, true);
+
+    if (!$puntosCarga) {
+        echo json_encode(['status' => 'error', 'message' => 'Datos inválidos']);
+        exit;
+    }
+
+    foreach ($puntosCarga as $punto) {
+        // Insertar o actualizar Punto Carga
+        $stmtPunto = $conexion->prepare("INSERT INTO puntos_carga (id, visible, tipoUsuario, latitud, longitud, direccion, ciudadYDepartamento) 
+            VALUES (?, ?, ?, ?, ?, ?, ?) 
+            ON DUPLICATE KEY UPDATE 
+            visible=VALUES(visible), tipoUsuario=VALUES(tipoUsuario), direccion=VALUES(direccion), ciudadYDepartamento=VALUES(ciudadYDepartamento)");
+        
+        $visibleInt = $punto['visible'] ? 1 : 0;
+        $stmtPunto->bind_param("iisddss", $punto['id'], $visibleInt, $punto['tipoUsuario'], $punto['latitud'], $punto['longitud'], $punto['direccion'], $punto['ciudadYDepartamento']);
+        $stmtPunto->execute();
+        $stmtPunto->close();
+
+        // Insertar o actualizar sus Cargadores
+        if (!empty($punto['cargadores'])) {
+            // Borramos los conectores anteriores de este punto para evitar desincronizaciones
+            $stmtDel = $conexion->prepare("DELETE FROM cargadores WHERE idPuntoCarga = ?");
+            $stmtDel->bind_param("i", $punto['id']);
+            $stmtDel->execute();
+            $stmtDel->close();
+
+            foreach ($punto['cargadores'] as $cargador) {
+                $stmtCargador = $conexion->prepare("INSERT INTO cargadores (id, idPuntoCarga, potenciaKilowatts, tipoConector, tipoCargador, estadoUso, estadoOperativo, precioKwh, precioHora) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                
+                $stmtCargador->bind_param("sidssssdd", 
+                    $cargador['id'], $cargador['idPuntoCarga'], $cargador['potenciaKilowatts'], 
+                    $cargador['tipoConector'], $cargador['tipoCargador'], $cargador['estadoUso'], 
+                    $cargador['estadoOperativo'], $cargador['precioKwh'], $cargador['precioHora']
+                );
+                $stmtCargador->execute();
+                $stmtCargador->close();
+            }
+        }
+    }
+}
+
+// B. OBTENER PUNTOS Y CARGADORES PARA EL MAPA (GET)
+if ($method === 'GET') {
+    // Unimos los puntos y los cargadores en una sola consulta
+    $sql = "SELECT 
+                p.id AS punto_id, p.latitud, p.longitud, p.direccion, p.ciudadYDepartamento, p.tipoUsuario, p.visible,
+                c.id AS cargador_id, c.potenciaKilowatts, c.tipoConector, c.tipoCargador, c.estadoUso, c.estadoOperativo, c.precioKwh, c.precioHora
+            FROM puntos_carga p
+            LEFT JOIN cargadores c ON p.id = c.idPuntoCarga
+            WHERE p.visible = 1";
+
+    $result = $conexion->query($sql);
+    $puntosMap = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $idPunto = $row['punto_id'];
+
+        // Si el punto aún no está en nuestro array temporal, lo inicializamos
+        if (!isset($puntosMap[$idPunto])) {
+            $puntosMap[$idPunto] = [
+                'id' => $idPunto,
+                'latitud' => $row['latitud'],
+                'longitud' => $row['longitud'],
+                'direccion' => $row['direccion'],
+                'ciudadYDepartamento' => $row['ciudadYDepartamento'],
+                'tipoUsuario' => $row['tipoUsuario'],
+                'visible' => $row['visible'],
+                'cargadores' => []
+            ];
+        }
+
+        // Si el punto tiene un cargador asociado (gracias al LEFT JOIN), lo agregamos al array
+        if (!empty($row['cargador_id'])) {
+            $puntosMap[$idPunto]['cargadores'][] = [
+                'id' => $row['cargador_id'],
+                'idPuntoCarga' => $idPunto,
+                'potenciaKilowatts' => $row['potenciaKilowatts'],
+                'tipoConector' => $row['tipoConector'],
+                'tipoCargador' => $row['tipoCargador'],
+                'estadoUso' => $row['estadoUso'],
+                'estadoOperativo' => $row['estadoOperativo'],
+                'precioKwh' => $row['precioKwh'],
+                'precioHora' => $row['precioHora']
+            ];
+        }
+    }
+
+    // Convertimos el array asociativo a un array indexado para el JSON final
+    echo json_encode(array_values($puntosMap));
+    exit;
+}
+========================================
+/app/controller/controlador_registro.php ->
+<?php
+require_once __DIR__ . '/../model/conexion.php';
+require_once __DIR__ . '/../model/usuario.php';
+require_once __DIR__ . '/../model/usuarioParticular.php';
+require_once __DIR__ . '/../model/usuarioEmpresa.php';
+
+if (!empty($_POST["btnregistrar"])) {
+    if (!empty($_POST["nombre"]) && !empty($_POST["correo"]) && !empty($_POST["password"]) && !empty($_POST["confirm_password"])) {
+        
+        $tipo_usuario     = trim($_POST["tipo_usuario"] ?? 'part');
+        $nombre           = trim($_POST["nombre"]);
+        $cedula           = trim($_POST["cedula"] ?? '');
+        $rut              = trim($_POST["rut"] ?? '');
+        $correo           = trim($_POST["correo"]);
+        $password         = trim($_POST["password"]);
+        $confirm_password = trim($_POST["confirm_password"]);
+
+        if ($password !== $confirm_password) {
+            echo "<div class='alert alert-danger' style='color: red;'>Las contraseñas no coinciden.</div>";
+            return;
+        }
+
+        if (strlen($password) < 8) {
+            echo "<div class='alert alert-danger' style='color: red;'>La contraseña debe tener al menos 8 caracteres.</div>";
+            return;
+        }
+
+        if ($tipo_usuario === 'part' && empty($cedula)) {
+            echo "<div class='alert alert-danger' style='color: red;'>La cédula es obligatoria para particulares.</div>";
+            return;
+        }
+
+        if ($tipo_usuario === 'emp' && empty($rut)) {
+            echo "<div class='alert alert-danger' style='color: red;'>El RUT es obligatorio para empresas.</div>";
+            return;
+        }
+
+        // Verificar si el correo ya existe
+        $stmtCheck = $conexion->prepare("SELECT id FROM usuarios WHERE correo = ?");
+        $stmtCheck->bind_param("s", $correo);
+        $stmtCheck->execute();
+        $stmtCheck->store_result();
+
+        if ($stmtCheck->num_rows > 0) {
+            echo "<div class='alert alert-danger' style='color: red;'>El correo electrónico ya está registrado.</div>";
+        } else {
+            $stmtCheck->close();
+
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+            $estado_inicial = 'activo';
+            $seudonimo_def = null;
+            $foto_def = null;
+
+            // Instanciar la clase correcta según la selección del formulario
+            if ($tipo_usuario === 'part') {
+                $usuarioObj = new UsuarioParticular(null, $correo, $nombre, $password_hash, $seudonimo_def, $foto_def, $estado_inicial, $cedula, null);
+            } else {
+                $usuarioObj = new UsuarioEmpresa(null, $correo, $nombre, $password_hash, $seudonimo_def, $foto_def, $estado_inicial, $rut);
+            }
+
+            // Ejecutar el método polimórfico de registro
+            $stmt = $usuarioObj->Registrar($conexion);
+            
+            if ($stmt && $stmt->execute()) {
+                echo "<div class='alert alert-success' style='color: green;'>¡Registro exitoso! Redirigiendo...</div>";
+                echo "<script>
+                        setTimeout(function() {
+                            window.location.href = '/app/view/content/login.php';
+                        }, 2000);
+                      </script>";
+            } else {
+                echo "<div class='alert alert-danger' style='color: red;'>Error al registrarse. Inténtalo de nuevo.</div>";
+            }
+
+            if ($stmt) {
+                $stmt->close();
+            }
+        }
+    } else {
+        echo "<div class='alert alert-warning' style='color: orange;'>Por favor completa todos los campos obligatorios.</div>";
+    }
+}
+?>
+========================================
+/app/controller/controlador_perfil.php ->
+<?php
+require_once __DIR__ . '/../model/conexion.php';
+
+$idUsuario = $_SESSION["id"] ?? null;
+$mensaje = "";
+$tipoAlerta = "";
+
+if (!$idUsuario) {
+    exit("Acceso no autorizado.");
+}
+
+// 2. Procesar la actualización cuando se envía el formulario
+if (!empty($_POST["btnactualizar"])) {
+    $nombre    = trim($_POST["nombre"] ?? '');
+    $seudonimo = trim($_POST["seudonimo"] ?? '');
+    $correo    = trim($_POST["correo"] ?? '');
+    $nuevaPass = trim($_POST["nueva_password"] ?? '');
+    $confPass  = trim($_POST["confirmar_password"] ?? '');
+
+    if (!empty($nombre) && !empty($correo)) {
+        
+        // Verificamos si escribió algo en las contraseñas
+        if (!empty($nuevaPass) || !empty($confPass)) {
+            // Validar longitud mínima de 8 caracteres
+            if (strlen($nuevaPass) < 8) {
+                $mensaje = $lang['pass_corta'] ?? 'La contraseña debe tener al menos 8 caracteres.';
+                $tipoAlerta = "danger";
+            } 
+            // Validar que coincidan
+            elseif ($nuevaPass !== $confPass) {
+                $mensaje = $lang['pass_no_coinciden'] ?? 'Las contraseñas nuevas no coinciden.';
+                $tipoAlerta = "danger";
+            } else {
+                $passwordHash = password_hash($nuevaPass, PASSWORD_DEFAULT);
+                $stmtUpdate = $conexion->prepare("UPDATE usuarios SET nombre = ?, seudonimo = ?, correo = ?, password = ? WHERE id = ?");
+                $stmtUpdate->bind_param("ssssi", $nombre, $seudonimo, $correo, $passwordHash, $idUsuario);
+            }
+        } else {
+            // Sin cambio de contraseña
+            $stmtUpdate = $conexion->prepare("UPDATE usuarios SET nombre = ?, seudonimo = ?, correo = ? WHERE id = ?");
+            $stmtUpdate->bind_param("sssi", $nombre, $seudonimo, $correo, $idUsuario);
+        }
+
+        // Si no hay errores y se preparó el update, ejecutamos
+        if (empty($mensaje) && isset($stmtUpdate)) {
+            if ($stmtUpdate->execute()) {
+                $mensaje = $lang['perfil_actualizado_exito'] ?? 'Perfil actualizado correctamente.';
+                $tipoAlerta = "success";
+                
+                $_SESSION["usuario"] = $nombre;
+                $_SESSION["correo"] = $correo;
+            } else {
+                $mensaje = "Error al actualizar los datos: " . $conexion->error;
+                $tipoAlerta="danger";
+            }
+            $stmtUpdate->close();
+        }
+
+    } else {
+        $mensaje = $lang['nombre_correo_obligatorios'] ?? 'El nombre y el correo son obligatorios.';
+        $tipoAlerta = "warning";
+    }
+}
+
+// 1. Obtener siempre los datos actuales para pintar los inputs
+$stmt = $conexion->prepare("SELECT * FROM usuarios WHERE id = ?");
+$stmt->bind_param("i", $idUsuario);
+$stmt->execute();
+$resultado = $stmt->get_result();
+$datosUsuario = $resultado->fetch_assoc();
+$stmt->close();
+?>
+========================================
+/.user.ini ->
+open_basedir=/www/wwwroot/voltmap.duckdns.org/:/tmp/
+========================================
+/.gitignore ->
+.env
+========================================
+/index.php ->
+<?php
+// /www/wwwroot/voltmap.duckdns.org/index.php
+
+// 1. Cargamos el archivo que contiene la función
+//require_once __DIR__ . '/app/utils/cargar_env.php';
+
+// 2. Ejecutamos la función pasando la ruta correcta de tu archivo .env
+// (Si tu .env está dentro de la misma carpeta raíz del dominio, usa __DIR__ . '/.env')
+//cargarEnv(__DIR__ . '/.env');
+
+// 3. Redirigimos al mapa
+header("Location: /app/view/content/mapa.php");
+exit;
+========================================

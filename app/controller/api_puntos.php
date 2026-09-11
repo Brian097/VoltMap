@@ -3,6 +3,12 @@ error_reporting(0);
 error_reporting(E_ALL);
 header('Content-Type: application/json');
 
+// Asegurar que la sesión esté iniciada para obtener el ID del usuario actual
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$idUsuarioActual = $_SESSION['id'] ?? 0;
+
 require_once __DIR__ . '/../model/conexion.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -55,15 +61,19 @@ if ($method === 'POST') {
 
 // B. OBTENER PUNTOS Y CARGADORES PARA EL MAPA (GET)
 if ($method === 'GET') {
-    // Unimos los puntos y los cargadores en una sola consulta
+    // Consulta optimizada para traer los puntos públicos O los del usuario logueado en la sesión
     $sql = "SELECT 
-                p.id AS punto_id, p.latitud, p.longitud, p.direccion, p.ciudadYDepartamento, p.tipoUsuario, p.visible,
+                p.id AS punto_id, p.latitud, p.longitud, p.direccion, p.ciudadYDepartamento, p.tipoUsuario, p.visible, p.id_usuario,
                 c.id AS cargador_id, c.potenciaKilowatts, c.tipoConector, c.tipoCargador, c.estadoUso, c.estadoOperativo, c.precioKwh, c.precioHora
             FROM puntos_carga p
             LEFT JOIN cargadores c ON p.id = c.idPuntoCarga
-            WHERE p.visible = 1";
+            WHERE p.visible = 1 OR p.id_usuario = ?";
 
-    $result = $conexion->query($sql);
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("i", $idUsuarioActual);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
     $puntosMap = [];
 
     while ($row = $result->fetch_assoc()) {

@@ -1,0 +1,89 @@
+/* ==========================================================================
+   ESTILOS MIS CARGADORES - VoltMap
+   ========================================================================== */
+
+.mis-cargadores-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.cargadores-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cargador-item-card {
+    background: var(--fondo);
+    padding: 18px 20px;
+    border-radius: 10px;
+    border: 1.5px solid var(--borde);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cargador-item-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.cargador-info strong {
+    font-size: 15px;
+    display: block;
+    color: var(--txt);
+    margin-bottom: 4px;
+}
+
+.cargador-info span {
+    font-size: 13px;
+    color: var(--sub);
+}
+
+.cargador-acciones {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Estilo unificado y moderno para los botones de acción */
+.btn-accion-editar,
+.btn-accion-eliminar {
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+}
+
+/* Botón Editar (Estilo secundario limpio) */
+.btn-accion-editar {
+    background: transparent;
+    color: var(--txt, #1e293b);
+    border-color: var(--borde, #cbd5e1);
+}
+
+.btn-accion-editar:hover {
+    background: var(--borde, #f1f5f9);
+    border-color: #94a3b8;
+}
+
+/* Botón Eliminar (Estilo de alerta sutil) */
+.btn-accion-eliminar {
+    background: transparent;
+    color: #ef4444;
+    border-color: #fecaca;
+}
+
+.btn-accion-eliminar:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+    color: #dc2626;
+}

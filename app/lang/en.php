@@ -56,5 +56,31 @@ $lang = [
     'nav_perfil' => 'Profile',
     'nav_vehiculos' => 'Vehicles',
 
-    'explorando_invitado' => 'You are exploring as a guest'
+    'explorando_invitado' => 'You are exploring as a guest',
+
+    // Publicar
+    'nav_publicar' => 'Publish',
+    'publicar_titulo' => 'Publish Charger',
+    'sub_publicar' => 'Register a new charging point and its connectors on the map',
+    'info_punto' => 'Charging Point Information',
+    'direccion_lbl' => 'Address',
+    'ciudad_depto_lbl' => 'City and State/Department',
+    'latitud_lbl' => 'Latitude',
+    'longitud_lbl' => 'Longitude',
+    'info_cargador' => 'Charger / Connector Information',
+    'potencia_lbl' => 'Power (kW)',
+    'tipo_conector_lbl' => 'Connector Type',
+    'tipo_cargador_lbl' => 'Current / Charger Type',
+    'precio_kwh_lbl' => 'Price per kWh ($)',
+    'precio_hora_lbl' => 'Price per Hour ($)',
+    'btn_publicar' => 'Publish Charger',
+    'punto_publicado_exito' => 'Charging point published successfully.',
+    'error_publicar' => 'An error occurred while publishing the charger.',
+
+    'mis_cargadores' => 'My Published Chargers',
+    'editar' => 'Edit',
+    'eliminar' => 'Delete',
+    'cargador_actualizado_exito' => 'Charger updated successfully.',
+    'cargador_eliminado_exito' => 'Charger deleted successfully.',
+    'confirmar_eliminar' => 'Are you sure you want to delete this charger?',
 ];

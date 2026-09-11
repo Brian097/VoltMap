@@ -56,5 +56,31 @@ $lang = [
     'nav_perfil' => 'Perfil',
     'nav_vehiculos' => 'Vehículos',
 
-    'explorando_invitado' => 'Estás explorando como invitado'
+    'explorando_invitado' => 'Estás explorando como invitado',
+
+    // Publicar
+    'nav_publicar' => 'Publicar',
+    'publicar_titulo' => 'Publicar Cargador',
+    'sub_publicar' => 'Registra un nuevo punto de carga y sus conectores en el mapa',
+    'info_punto' => 'Información del Punto de Carga',
+    'direccion_lbl' => 'Dirección',
+    'ciudad_depto_lbl' => 'Ciudad y Departamento',
+    'latitud_lbl' => 'Latitud',
+    'longitud_lbl' => 'Longitud',
+    'info_cargador' => 'Información del Cargador / Conector',
+    'potencia_lbl' => 'Potencia (kW)',
+    'tipo_conector_lbl' => 'Tipo de Conector',
+    'tipo_cargador_lbl' => 'Tipo de Corriente / Cargador',
+    'precio_kwh_lbl' => 'Precio por kWh ($)',
+    'precio_hora_lbl' => 'Precio por Hora ($)',
+    'btn_publicar' => 'Publicar Cargador',
+    'punto_publicado_exito' => 'Punto de carga publicado exitosamente.',
+    'error_publicar' => 'Hubo un error al publicar el cargador.',
+
+    'mis_cargadores' => 'Mis Cargadores Publicados',
+    'editar' => 'Editar',
+    'eliminar' => 'Eliminar',
+    'cargador_actualizado_exito' => 'Cargador actualizado correctamente.',
+    'cargador_eliminado_exito' => 'Cargador eliminado correctamente.',
+    'confirmar_eliminar' => '¿Estás seguro de que deseas eliminar este cargador?',
 ];

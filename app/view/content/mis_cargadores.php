@@ -1,0 +1,112 @@
+<?php
+    require_once __DIR__ . "/../../view/inc/auth.php";
+    require_once __DIR__ . "/../../view/inc/lang.php";
+    require_once __DIR__ . "/../../model/conexion.php";
+
+    $idUsuarioActual = $_SESSION['id'] ?? 0;
+    $mensaje = "";
+    $tipoAlerta = "";
+
+    // Lógica para eliminar asegurando propiedad
+    if (isset($_GET['eliminar'])) {
+        $idPunto = intval($_GET['eliminar']);
+        
+        $conexion->begin_transaction();
+        try {
+            $stmtV = $conexion->prepare("SELECT id FROM puntos_carga WHERE id = ? AND id_usuario = ?");
+            $stmtV->bind_param("ii", $idPunto, $idUsuarioActual);
+            $stmtV->execute();
+            if ($stmtV->get_result()->num_rows > 0) {
+                $stmtV->close();
+
+                $stmtC = $conexion->prepare("DELETE FROM cargadores WHERE idPuntoCarga = ?");
+                $stmtC->bind_param("i", $idPunto);
+                $stmtC->execute();
+                $stmtC->close();
+
+                $stmtP = $conexion->prepare("DELETE FROM puntos_carga WHERE id = ?");
+                $stmtP->bind_param("i", $idPunto);
+                $stmtP->execute();
+                $stmtP->close();
+
+                $conexion->commit();
+                $mensaje = $lang['cargador_eliminado_exito'] ?? 'Cargador eliminado correctamente.';
+                $tipoAlerta = "success";
+            } else {
+                $conexion->rollback();
+                $mensaje = "No tienes permisos para eliminar este cargador.";
+                $tipoAlerta = "danger";
+            }
+        } catch (Exception $e) {
+            $conexion->rollback();
+            $mensaje = "Error al eliminar el cargador.";
+            $tipoAlerta = "danger";
+        }
+    }
+
+    $sql = "SELECT p.id as idPunto, p.direccion, p.ciudadYDepartamento, c.potenciaKilowatts, c.tipoConector, p.id_usuario 
+            FROM puntos_carga p 
+            INNER JOIN cargadores c ON p.id = c.idPuntoCarga 
+            WHERE p.id_usuario = ?";
+            
+    $stmtLista = $conexion->prepare($sql);
+    $stmtLista->bind_param("i", $idUsuarioActual);
+    $stmtLista->execute();
+    $resultado = $stmtLista->get_result();
+?>
+<!DOCTYPE html>
+<html lang="<?php echo $idioma_actual ?? 'es'; ?>">
+<head>
+    <meta charset="UTF-8">
+    <title><?php echo $lang['mis_cargadores'] ?? 'Mis Cargadores'; ?> - VoltMap</title>
+    <!-- Estilo base unificado del sistema -->
+    <link rel="stylesheet" href="../../view/css/estilosPublicar.css">
+    <!-- Estilo específico para mis cargadores -->
+    <link rel="stylesheet" href="../../view/css/estilosMisCargadores.css">
+</head>
+<body>
+    <div class="sc on">
+        <div class="perfil-container mis-cargadores-container">
+            <div class="perfil-nav-volver">
+                <a href="mapa.php" class="btn-volver">← Volver al Mapa</a>
+            </div>
+
+            <div class="perfil-header-info">
+                <h1><?php echo $lang['mis_cargadores'] ?? 'Mis Cargadores Publicados'; ?></h1>
+                <p>Gestiona, edita o elimina los puntos de carga que has registrado.</p>
+            </div>
+
+            <?php if (!empty($mensaje)): ?>
+                <div class="perfil-alert <?php echo $tipoAlerta; ?>">
+                    <?php echo $mensaje; ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="perfil-card">
+                <?php if ($resultado && $resultado->num_rows > 0): ?>
+                    <div class="cargadores-lista">
+                        <?php while($row = $resultado->fetch_assoc()): ?>
+                            <div class="cargador-item-card">
+                                <div class="cargador-info">
+                                    <strong><?php echo htmlspecialchars($row['direccion']); ?> (<?php echo htmlspecialchars($row['ciudadYDepartamento']); ?>)</strong>
+                                    <span>Conector: <?php echo htmlspecialchars($row['tipoConector']); ?> | Potencia: <?php echo $row['potenciaKilowatts']; ?> kW</span>
+                                </div>
+                                <div class="cargador-acciones">
+                                    <a href="editar_cargador.php?id=<?php echo $row['idPunto']; ?>" class="btn-accion-editar">
+                                        <?php echo $lang['editar'] ?? 'Editar'; ?>
+                                    </a>
+                                    <a href="mis_cargadores.php?eliminar=<?php echo $row['idPunto']; ?>" class="btn-accion-eliminar" onclick="return confirm('<?php echo $lang['confirmar_eliminar'] ?? '¿Estás seguro de eliminar este cargador?'; ?>');">
+                                        <?php echo $lang['eliminar'] ?? 'Eliminar'; ?>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="perfil-texto-vacio">No tienes cargadores publicados todavía.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
