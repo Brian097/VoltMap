@@ -1,10 +1,12 @@
 /* ==========================================================================
-   ESTILOS EDITAR CARGADOR - VoltMap
+   ESTILOS EDITAR CARGADOR - VoltMap (Responsive)
    ========================================================================== */
 
 .editar-container {
     max-width: 900px;
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .formulario-editar {
@@ -39,6 +41,8 @@
     background: var(--fondo);
     color: var(--txt);
     font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #map-editar {
@@ -54,4 +58,22 @@
     font-size: 12px;
     color: var(--sub);
     margin-bottom: 5px;
+}
+
+/* ==========================================================================
+   MEDIA QUERY PARA MÓVILES (Editar Cargador)
+   ========================================================================== */
+@media (max-width: 640px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* Cambia las rejillas dobles a una sola columna */
+        gap: 18px;
+    }
+
+    #map-editar {
+        height: 280px; /* Reduce ligeramente la altura del mapa para celulares */
+    }
+    
+    .perfil-card {
+        padding: 15px !important;
+    }
 }

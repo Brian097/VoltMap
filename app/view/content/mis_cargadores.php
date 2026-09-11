@@ -1,64 +1,31 @@
 <?php
-    require_once __DIR__ . "/../../view/inc/auth.php";
-    require_once __DIR__ . "/../../view/inc/lang.php";
+// Si la vista se carga de forma directa por URL sin pasar por el controlador, protegemos las variables básicas
+if (!isset($resultado)) {
+    require_once __DIR__ . "/../inc/auth.php";
+    require_once __DIR__ . "/../inc/lang.php";
     require_once __DIR__ . "/../../model/conexion.php";
-
+    
     $idUsuarioActual = $_SESSION['id'] ?? 0;
     $mensaje = "";
     $tipoAlerta = "";
-
-    // Lógica para eliminar asegurando propiedad
-    if (isset($_GET['eliminar'])) {
-        $idPunto = intval($_GET['eliminar']);
-        
-        $conexion->begin_transaction();
-        try {
-            $stmtV = $conexion->prepare("SELECT id FROM puntos_carga WHERE id = ? AND id_usuario = ?");
-            $stmtV->bind_param("ii", $idPunto, $idUsuarioActual);
-            $stmtV->execute();
-            if ($stmtV->get_result()->num_rows > 0) {
-                $stmtV->close();
-
-                $stmtC = $conexion->prepare("DELETE FROM cargadores WHERE idPuntoCarga = ?");
-                $stmtC->bind_param("i", $idPunto);
-                $stmtC->execute();
-                $stmtC->close();
-
-                $stmtP = $conexion->prepare("DELETE FROM puntos_carga WHERE id = ?");
-                $stmtP->bind_param("i", $idPunto);
-                $stmtP->execute();
-                $stmtP->close();
-
-                $conexion->commit();
-                $mensaje = $lang['cargador_eliminado_exito'] ?? 'Cargador eliminado correctamente.';
-                $tipoAlerta = "success";
-            } else {
-                $conexion->rollback();
-                $mensaje = "No tienes permisos para eliminar este cargador.";
-                $tipoAlerta = "danger";
-            }
-        } catch (Exception $e) {
-            $conexion->rollback();
-            $mensaje = "Error al eliminar el cargador.";
-            $tipoAlerta = "danger";
-        }
-    }
 
     $sql = "SELECT p.id as idPunto, p.direccion, p.ciudadYDepartamento, c.potenciaKilowatts, c.tipoConector, p.id_usuario 
             FROM puntos_carga p 
             INNER JOIN cargadores c ON p.id = c.idPuntoCarga 
             WHERE p.id_usuario = ?";
-            
     $stmtLista = $conexion->prepare($sql);
     $stmtLista->bind_param("i", $idUsuarioActual);
     $stmtLista->execute();
     $resultado = $stmtLista->get_result();
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $idioma_actual ?? 'es'; ?>">
 <head>
     <meta charset="UTF-8">
     <title><?php echo $lang['mis_cargadores'] ?? 'Mis Cargadores'; ?> - VoltMap</title>
+    <!-- Etiqueta indispensable para diseño responsive en teléfonos -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Estilo base unificado del sistema -->
     <link rel="stylesheet" href="../../view/css/estilosPublicar.css">
     <!-- Estilo específico para mis cargadores -->
@@ -95,6 +62,7 @@
                                     <a href="editar_cargador.php?id=<?php echo $row['idPunto']; ?>" class="btn-accion-editar">
                                         <?php echo $lang['editar'] ?? 'Editar'; ?>
                                     </a>
+                                    <!-- Si quieres que el enlace de eliminar pase por el controlador, puedes apuntarlo a ../../controller/controlador_mis_cargadores.php?eliminar=... o mantenerlo si la vista redirige -->
                                     <a href="mis_cargadores.php?eliminar=<?php echo $row['idPunto']; ?>" class="btn-accion-eliminar" onclick="return confirm('<?php echo $lang['confirmar_eliminar'] ?? '¿Estás seguro de eliminar este cargador?'; ?>');">
                                         <?php echo $lang['eliminar'] ?? 'Eliminar'; ?>
                                     </a>

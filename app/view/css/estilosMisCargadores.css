@@ -1,10 +1,12 @@
 /* ==========================================================================
-   ESTILOS MIS CARGADORES - VoltMap
+   ESTILOS MIS CARGADORES - VoltMap (Responsive)
    ========================================================================== */
 
 .mis-cargadores-container {
     max-width: 900px;
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .cargadores-lista {
@@ -22,6 +24,7 @@
     justify-content: space-between;
     align-items: center;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    gap: 15px;
 }
 
 .cargador-item-card:hover {
@@ -29,11 +32,16 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
+.cargador-info {
+    overflow: hidden;
+}
+
 .cargador-info strong {
     font-size: 15px;
     display: block;
     color: var(--txt);
     margin-bottom: 4px;
+    word-break: break-word;
 }
 
 .cargador-info span {
@@ -45,9 +53,10 @@
     display: flex;
     gap: 8px;
     align-items: center;
+    flex-shrink: 0;
 }
 
-/* Estilo unificado y moderno para los botones de acción */
+/* Estilo moderno para los botones de acción */
 .btn-accion-editar,
 .btn-accion-eliminar {
     padding: 7px 14px;
@@ -63,7 +72,6 @@
     border: 1.5px solid transparent;
 }
 
-/* Botón Editar (Estilo secundario limpio) */
 .btn-accion-editar {
     background: transparent;
     color: var(--txt, #1e293b);
@@ -75,7 +83,6 @@
     border-color: #94a3b8;
 }
 
-/* Botón Eliminar (Estilo de alerta sutil) */
 .btn-accion-eliminar {
     background: transparent;
     color: #ef4444;
@@ -86,4 +93,30 @@
     background: #fef2f2;
     border-color: #ef4444;
     color: #dc2626;
+}
+
+/* ==========================================================================
+   MEDIA QUERY PARA MÓVILES (Mis Cargadores)
+   ========================================================================== */
+@media (max-width: 640px) {
+    .cargador-item-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+    }
+
+    .cargador-acciones {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        margin-top: 10px;
+        border-top: 1px solid var(--borde, #e2e8f0);
+        padding-top: 12px;
+    }
+
+    .btn-accion-editar,
+    .btn-accion-eliminar {
+        justify-content: center;
+        padding: 10px;
+    }
 }
