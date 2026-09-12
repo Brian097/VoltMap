@@ -13,8 +13,12 @@ class Moderador extends Usuario {
         // Lógica para calificar reporte
     }
 
-    public function Registrar($conexion){}
+    public function Registrar($conexion){
+
+    }
     
+    
+
 }
 
 ?>

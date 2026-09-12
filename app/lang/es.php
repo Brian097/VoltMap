@@ -55,6 +55,7 @@ $lang = [
     'nav_publicar' => 'Publicar',
     'nav_perfil' => 'Perfil',
     'nav_vehiculos' => 'Vehículos',
+    'cerrar_sesion' => 'Cerrar Sesión',
 
     'explorando_invitado' => 'Estás explorando como invitado',
 
@@ -77,7 +78,7 @@ $lang = [
     'punto_publicado_exito' => 'Punto de carga publicado exitosamente.',
     'error_publicar' => 'Hubo un error al publicar el cargador.',
 
-    'mis_cargadores' => 'Mis Cargadores Publicados',
+    'mis_cargadores' => 'Mis Cargadores',
     'editar' => 'Editar',
     'eliminar' => 'Eliminar',
     'cargador_actualizado_exito' => 'Cargador actualizado correctamente.',

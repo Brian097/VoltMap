@@ -32,20 +32,7 @@
         <img src="../../view/img/VoltMap-3.png" alt="Logo de la app">
       </div>
       <input class="search-bar" placeholder="<?php echo $lang['buscar_placeholder'] ?? 'Buscar dirección o lugar...'; ?>">
-      <button class="icon-btn" title="<?php echo $lang['filtros_btn'] ?? 'Filtros'; ?>">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2">
-          <line x1="4" y1="6" x2="20" y2="6" />
-          <line x1="8" y1="12" x2="16" y2="12" />
-          <line x1="10" y1="18" x2="14" y2="18" />
-        </svg>
-      </button>
-      <button class="icon-btn" title="<?php echo $lang['notificaciones_btn'] ?? 'Notificaciones'; ?>">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-        </svg>
-      </button>
-      <button class="icon-btn" title="<?php echo $lang['menu_btn'] ?? 'Menu'; ?>" onclick="location.href='/app/controller/controlador_cerrar_sesion.php'">
+      <button class="icon-btn" title="<?php echo $lang['cerrar_sesion'] ?? 'Cerrar Sesion'; ?>" onclick="location.href='/app/controller/controlador_cerrar_sesion.php'">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
         <polyline points="10 17 15 12 10 7"></polyline>
@@ -78,12 +65,17 @@
 
     <!-- Menú inferior (Bottom Nav) -->
     <div class="bottom-nav">
-      <button class="bn on">
-        <svg viewBox="0 0 24 24">
-          <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-        </svg>
-        <?php echo $lang['nav_mapa'] ?? 'Mapa'; ?>
-      </button>
+      <a href="mis_cargadores.php" class="bn on" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="8" y1="6" x2="21" y2="6"></line>
+        <line x1="8" y1="12" x2="21" y2="12"></line>
+        <line x1="8" y1="18" x2="21" y2="18"></line>
+        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+      </svg>
+      <?php echo $lang['mis_cargadores'] ?? 'Mis Cargadores'; ?>
+    </a>
       <button class="bn" onclick="location.href='reservas.php'">
         <svg viewBox="0 0 24 24">
           <rect x="3" y="4" width="18" height="18" rx="2" />

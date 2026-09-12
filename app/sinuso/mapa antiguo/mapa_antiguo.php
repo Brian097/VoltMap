@@ -134,6 +134,6 @@
   <script src="/app/view/js/openchargemap.js"></script>
 
   <!-- Interacción de la interfaz (chips, menú, etc.) -->
-  <script src="/app/view/js/script.js"></script>
+  <script src="/app/sinuso/mapa antiguo/openchargemap.js"></script>
 </body>
 </html>

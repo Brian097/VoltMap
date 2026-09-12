@@ -55,6 +55,7 @@ $lang = [
     'nav_publicar' => 'Publish',
     'nav_perfil' => 'Profile',
     'nav_vehiculos' => 'Vehicles',
+    'cerrar_sesion' => 'Log Out',
 
     'explorando_invitado' => 'You are exploring as a guest',
 
@@ -77,10 +78,12 @@ $lang = [
     'punto_publicado_exito' => 'Charging point published successfully.',
     'error_publicar' => 'An error occurred while publishing the charger.',
 
-    'mis_cargadores' => 'My Published Chargers',
+    'mis_cargadores' => 'My Chargers',
     'editar' => 'Edit',
     'eliminar' => 'Delete',
     'cargador_actualizado_exito' => 'Charger updated successfully.',
     'cargador_eliminado_exito' => 'Charger deleted successfully.',
     'confirmar_eliminar' => 'Are you sure you want to delete this charger?',
+
+    
 ];

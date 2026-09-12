@@ -111,9 +111,6 @@
                     </div>
                 </div>
                 <div style="margin-top: 20px;">
-                    <a href="mis_cargadores.php" class="btn-out" style="display: inline-block; text-align: center; width: 100%;">Gestionar mis puntos de carga publicados</a>
-                </div>
-
             </div>
         </div>
     </div>
