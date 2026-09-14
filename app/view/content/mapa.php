@@ -32,7 +32,20 @@
         <img src="../../view/img/VoltMap-3.png" alt="Logo de la app">
       </div>
       <input class="search-bar" placeholder="<?php echo $lang['buscar_placeholder'] ?? 'Buscar dirección o lugar...'; ?>">
-      <button class="icon-btn" title="<?php echo $lang['cerrar_sesion'] ?? 'Cerrar Sesion'; ?>" onclick="location.href='/app/controller/controlador_cerrar_sesion.php'">
+    <?php 
+    if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] == 'administrador') {
+      echo '<button class="icon-btn" title="' . ($lang['panel_admin'] ?? 'Panel Administrador') . '" onclick="location.href=\'/app/view/content/panel_admin.php\'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </button>';
+}
+?>
+
+      <button class="icon-btn" title="<?php echo $lang['cerrar_sesion'] ?? 'Cerrar Sesión'; ?>" onclick="location.href='/app/controller/controlador_cerrar_sesion.php'">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--sub)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
         <polyline points="10 17 15 12 10 7"></polyline>

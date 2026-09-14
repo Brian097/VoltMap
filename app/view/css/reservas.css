@@ -1,0 +1,181 @@
+/* Variables de diseño heredadas del Perfil */
+:root {
+    --fondo: #f8fafc;
+    --txt: #0f172a;
+    --sub: #64748b;
+    --borde: #cbd5e1;
+    --borde-suave: #e2e8f0;
+    --azul: #2563eb;
+    --azul-hover: #1d4ed8;
+    --verde-fondo: #dcfce7;
+    --verde-txt: #15803d;
+    --amarillo-fondo: #fef08a; 
+    --amarillo-txt: #854d0e; 
+    --rojo-fondo: #fee2e2;
+    --rojo-txt: #b91c1c;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--fondo);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    min-height: 100vh;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Contenedor principal estilo "Tarjeta de Perfil" */
+.contenedor-reserva {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 450px;
+}
+
+.contenedor-ancho {
+    max-width: 900px; 
+}
+
+.contenedor-reserva h1 {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--txt);
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--borde-suave);
+}
+
+/* Estilos para el formulario de crear reserva */
+.contenedor-reserva form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contenedor-reserva label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--txt);
+    margin-top: 5px;
+}
+
+.contenedor-reserva input, 
+.contenedor-reserva select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.contenedor-reserva input:focus, 
+.contenedor-reserva select:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Botones */
+.btn-principal {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+    background-color: var(--azul);
+    color: #fff;
+}
+
+.btn-principal:hover {
+    background-color: var(--azul-hover);
+}
+
+.enlace-secundario {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--txt);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: background 0.2s ease;
+    margin-top: 20px;
+}
+
+.enlace-secundario:hover {
+    background: #f1f5f9;
+}
+
+/* Tabla de Historial modernizada */
+.tabla-historial {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.tabla-historial th, 
+.tabla-historial td {
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--borde-suave);
+    vertical-align: middle;
+}
+
+.tabla-historial th {
+    background-color: var(--fondo);
+    color: var(--sub);
+    font-weight: 700;
+    font-size: 13px;
+    border-bottom: 2px solid var(--borde-suave);
+    border-radius: 8px 8px 0 0;
+}
+
+.tabla-historial tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Etiquetas de estado estilo Badge */
+.estado {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-block;
+    text-align: center;
+}
+
+.estado.pendiente {
+    background-color: var(--amarillo-fondo);
+    color: var(--amarillo-txt);
+}
+
+.estado.completado {
+    background-color: var(--verde-fondo);
+    color: var(--verde-txt);
+}
+
+.estado.cancelado {
+    background-color: var(--rojo-fondo);
+    color: var(--rojo-txt);
+}

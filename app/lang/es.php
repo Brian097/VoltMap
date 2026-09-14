@@ -56,6 +56,7 @@ $lang = [
     'nav_perfil' => 'Perfil',
     'nav_vehiculos' => 'Vehículos',
     'cerrar_sesion' => 'Cerrar Sesión',
+    'panel_admin' => 'Panel Administrador',
 
     'explorando_invitado' => 'Estás explorando como invitado',
 

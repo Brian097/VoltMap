@@ -1,23 +1,34 @@
 <?php
 function sincronizarCargadoresOCM($conexion) {
+    // Ampliar el tiempo máximo de ejecución a 5 minutos para evitar timeouts de PHP
+    set_time_limit(300);
+    ini_set('default_socket_timeout', 300);
+
     $OCM_API_KEY = $_ENV['OCM_API_KEY'] ?? getenv('OCM_API_KEY') ?? '';
     $apiUrl = "https://api.openchargemap.io/v3/poi?output=json&countrycode=UY&maxresults=700&key=$OCM_API_KEY";
 
+    // Usar cURL en lugar de file_get_contents para un mejor control de errores y tiempos de espera
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 120); // Timeout de 2 minutos para la respuesta de la API
+    curl_setopt($ch, CURLOPT_USERAGENT, 'VoltMap-App');
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 
-    $options = [
-        "http" => [
-            "header" => "User-Agent: VoltMap-App\r\n"
-        ]
-    ];
-    $context = stream_context_create($options);
-    $response = @file_get_contents($apiUrl, false, $context);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
 
-    if ($response === false) {
+    // Validación de errores de red o códigos HTTP incorrectos
+    if ($response === false || $httpCode !== 200) {
+        error_log("[OCM Sync Error] cURL Error: " . $curlError . " | HTTP Code: " . $httpCode);
         return false;
     }
 
     $stations = json_decode($response, true);
     if (!is_array($stations)) {
+        error_log("[OCM Sync Error] Error al decodificar JSON de la respuesta.");
         return false;
     }
 
@@ -46,19 +57,16 @@ function sincronizarCargadoresOCM($conexion) {
             $stmtPunto->execute();
             $stmtPunto->close();
         
-                if (!empty($station['Connections'])) {
+            if (!empty($station['Connections'])) {
                 $stmtDel = $conexion->prepare("DELETE FROM cargadores WHERE idPuntoCarga = ?");
                 $stmtDel->bind_param("i", $puntoId);
                 $stmtDel->execute();
                 $stmtDel->close();
 
                 foreach ($station['Connections'] as $index => $conn) {
-                    // Obtenemos la cantidad que indica OCM (si no viene o está vacío, asumimos al menos 1)
                     $cantidadConectores = isset($conn['Quantity']) && $conn['Quantity'] > 0 ? (int)$conn['Quantity'] : 1;
 
-                    // Iteramos tantas veces como indique la cantidad física del conector
                     for ($q = 0; $q < $cantidadConectores; $q++) {
-                        // Creamos un ID único combinando el punto, el índice del array y la subcantidad
                         $cId = "{$puntoId}-{$index}-{$q}"; 
                         
                         $potencia = $conn['PowerKW'] ?? 0;
@@ -70,7 +78,7 @@ function sincronizarCargadoresOCM($conexion) {
                         $pHora = 0.0;
 
                         $sqlCargador = "INSERT INTO cargadores (id, idPuntoCarga, potenciaKilowatts, tipoConector, tipoCargador, estadoUso, estadoOperativo, precioKwh, precioHora) 
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                         $stmtCargador = $conexion->prepare($sqlCargador);
                         $stmtCargador->bind_param("sidsdssdd", $cId, $puntoId, $potencia, $tConector, $tCargador, $eUso, $eOp, $pKwh, $pHora);
@@ -84,6 +92,8 @@ function sincronizarCargadoresOCM($conexion) {
         return true;
     } catch (Exception $e) {
         $conexion->rollback();
+        // Guardar el mensaje exacto de la excepción en el log del servidor para depuración
+        error_log("[OCM Sync Exception] " . $e->getMessage());
         return false;
     }
 }

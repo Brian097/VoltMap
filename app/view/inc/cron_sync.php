@@ -12,3 +12,5 @@ if ($resultado) {
 } else {
     echo "[" . date('Y-m-d H:i:s') . "] Error al sincronizar con OCM.\n";
 }
+
+?>
