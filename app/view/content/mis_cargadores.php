@@ -30,6 +30,8 @@ if (!isset($resultado)) {
     <link rel="stylesheet" href="/app/view/css/estilosPublicar.css">
     <!-- Estilo específico para mis cargadores -->
     <link rel="stylesheet" href="/app/view/css/estilosMisCargadores.css">
+
+    <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
 <body>
     <div class="sc on">
         <div class="perfil-container mis-cargadores-container">

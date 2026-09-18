@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="./../css/estilosMapa.css" />
     <link rel="stylesheet" href="./../css/estilosInvitados.css" />
+      <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
+
 </head>
 <body>
 

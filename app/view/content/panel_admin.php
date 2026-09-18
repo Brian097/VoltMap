@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - VoltMap</title>
     <link rel="stylesheet" href="../../view/css/estilosPanelAdmin.css">
+    <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
+
 </head>
 <body>
     <div class="admin-container">

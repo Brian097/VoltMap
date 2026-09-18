@@ -21,6 +21,7 @@
   <!-- Hojas de estilo de la app y Leaflet -->
   <link rel="stylesheet" href="../../view/css/estilosMapa.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
 </head>
 
 <body>

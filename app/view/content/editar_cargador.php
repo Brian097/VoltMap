@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="../../view/css/estilosPublicar.css">
     <!-- Estilo específico para edición -->
     <link rel="stylesheet" href="../../view/css/estilosEditarCargador.css">
+
+    <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
 </head>
 <body>
     <div class="sc on">

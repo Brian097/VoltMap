@@ -34,6 +34,8 @@ $reservas = $resultado->fetch_all(MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Reservas</title>
     <link rel="stylesheet" href="../css/reservas.css">
+    <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
+
 </head>
 <body>
 

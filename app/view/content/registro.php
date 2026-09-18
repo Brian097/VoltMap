@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $lang['crear_cuenta']; ?> - VoltMap</title>
     <link rel="stylesheet" href="../css/estilosRegistro.css">
+    <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
+
 </head>
 <body>
 

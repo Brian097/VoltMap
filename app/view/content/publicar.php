@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="../../view/css/estilosPublicar.css">
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
+
 </head>
 <body>
     <div class="sc on" id="s-perfil">
