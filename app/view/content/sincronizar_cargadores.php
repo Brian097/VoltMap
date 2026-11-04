@@ -16,7 +16,7 @@
             text-align: center;
             padding: 1.5rem 0;
         }
-        /* Estilos del Spinner de Carga */
+        /* los estilos de la animación de carga */
         .spinner {
             width: 50px;
             height: 50px;
@@ -45,7 +45,7 @@
             font-size: 0.9rem;
             max-height: 250px;
             overflow-y: auto;
-            display: none; /* Oculto hasta que termine */
+            display: none;
         }
         .hidden {
             display: none !important;
@@ -68,7 +68,7 @@
         <!-- Contenedor donde se mostrará el resultado de cron_sync.php -->
         <div id="sync-output" class="sync-output"></div>
 
-        <!-- Acciones (Botón de volver se muestra al terminar o siempre disponible) -->
+        <!-- Acciones -->
         <div class="admin-actions">
             <button type="button" id="btn-volver" class="btn-admin btn-admin-secundario" onclick="location.href='/app/view/content/panel_admin.php'">
                 ← Volver al Panel Administrador
@@ -81,7 +81,7 @@
             const loaderSection = document.getElementById("loader-section");
             const syncOutput = document.getElementById("sync-output");
 
-            // Realizamos la petición asíncrona al script de sincronización
+            // se realiza la llamada al script de sincronización
             fetch('../inc/cron_sync.php')
                 .then(response => response.text())
                 .then(data => {

@@ -34,7 +34,7 @@ class Cargador {
     }
 
     public function publicar(): bool {
-        // Lógica para publicar el cargador individual
+        // Lógica para publicar el cargador
         return true;
     }
 

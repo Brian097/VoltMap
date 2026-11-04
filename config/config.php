@@ -1,15 +1,15 @@
 <?php
-function cargarEnv() {
-    // Definimos las rutas posibles dentro de los límites permitidos por el servidor
+function cargarEnv()
+{
     $rutasPosibles = [
-        __DIR__ . '/.env',          // Si config.php está en la raíz
-        dirname(__DIR__) . '/.env', // Si config.php está dentro de una carpeta (ej. /config/)
+        __DIR__ . '/.env',          
+        dirname(__DIR__) . '/.env', 
     ];
 
     $rutaFinal = null;
 
     foreach ($rutasPosibles as $ruta) {
-        // Usamos realpath solo si el archivo existe para evitar avisos
+
         if (file_exists($ruta)) {
             $rutaFinal = realpath($ruta);
             break;
@@ -17,10 +17,10 @@ function cargarEnv() {
     }
 
     if (!$rutaFinal) {
-        echo "<h3>❌ Error Crítico: PHP no puede leer el archivo .env</h3>";
+        echo "<h3>Error Crítico: PHP no puede leer el archivo .env</h3>";
         echo "Buscamos en las siguientes ubicaciones y todas fallaron:<br>";
         foreach ($rutasPosibles as $r) {
-            echo "- ❌ No existe o está fuera de path: " . htmlspecialchars($r) . "<br>";
+            echo "- No existe o está fuera de path: " . htmlspecialchars($r) . "<br>";
         }
         echo "<br><b>Tu directorio actual de ejecución es:</b> " . __DIR__ . "<br>";
         return false;
@@ -38,8 +38,6 @@ function cargarEnv() {
             $clave = trim($clave);
             $valor = trim($valor, " \t\n\r\0\x0B\"'");
 
-            // ELIMINAMOS putenv() porque está bloqueado en tu servidor.
-            // Usamos únicamente los arrays globales:
             $_ENV[$clave] = $valor;
             $_SERVER[$clave] = $valor;
         }

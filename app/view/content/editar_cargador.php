@@ -6,7 +6,7 @@
     $idUsuarioActual = $_SESSION['id'] ?? 0;
     $idPunto = intval($_GET['id'] ?? 0);
 
-    // Validar que el punto pertenezca al usuario actual antes de renderizar la vista
+    
     $stmt = $conexion->prepare("SELECT p.*, c.potenciaKilowatts, c.tipoConector, c.tipoCargador, c.precioKwh, c.precioHora, c.estadoOperativo 
                                 FROM puntos_carga p 
                                 INNER JOIN cargadores c ON p.id = c.idPuntoCarga 

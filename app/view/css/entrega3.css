@@ -1,0 +1,66 @@
+/* VoltMap - estilos de la 3ra entrega: filtros, reportes, modales, checkout y recibos */
+:root { --vm-azul:#1B3A6B; --vm-azul2:#1D4ED8; --vm-verde:#16A34A; --vm-rojo:#DC2626; --vm-ambar:#D97706;
+        --vm-borde:#CBD5E1; --vm-sub:#64748B; --vm-txt:#0F172A; --vm-fondo:#F1F5F9; }
+
+/* ---- Popup del mapa ---- */
+.vm-pop { font-family: 'Inter', system-ui, sans-serif; min-width: 230px; max-width: 280px; }
+.vm-pop h4 { margin: 0 0 2px; font-size: 14px; }
+.vm-pop .vm-sub { margin: 0 0 6px; font-size: 12px; color: var(--vm-sub); }
+.vm-tag { font-size: 11px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+.vm-tag.priv { background: #dbeafe; color: var(--vm-azul2); }
+.vm-c { border-top: 1px solid #e2e8f0; margin-top: 8px; padding-top: 6px; font-size: 12px; line-height: 1.5; }
+.vm-badge { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 700; color: #fff; margin-left: 4px; }
+.vm-badge.disponible { background: var(--vm-verde); } .vm-badge.en_uso { background: var(--vm-ambar); } .vm-badge.fuera { background: var(--vm-rojo); }
+.vm-acciones { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.vm-btn { border: 0; border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 600; cursor: pointer; background: var(--vm-azul2); color: #fff; }
+.vm-btn.sec { background: #fff; color: var(--vm-azul); border: 1.5px solid var(--vm-borde); }
+.vm-btn.verde { background: var(--vm-verde); }
+.vm-btn:disabled { opacity: .6; cursor: default; }
+.vm-nota { font-size: 11px; color: var(--vm-sub); margin-top: 6px; }
+
+/* ---- Panel "Más filtros" ---- */
+.vm-mas { display: none; gap: 10px; flex-wrap: wrap; align-items: end; padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--vm-borde); }
+.vm-mas.on { display: flex; }
+.vm-mas label { display: flex; flex-direction: column; font-size: 11px; font-weight: 600; color: var(--vm-sub); gap: 3px; }
+.vm-mas select, .vm-mas input { padding: 6px 8px; border: 1.5px solid var(--vm-borde); border-radius: 8px; font-size: 13px; min-width: 110px; }
+.vm-vacio { position: fixed; z-index: 1500; left: 50%; top: 130px; transform: translateX(-50%); background: #fff; padding: 8px 14px;
+            border-radius: 999px; box-shadow: 0 4px 18px rgba(0,0,0,.14); font-size: 13px; display: none; }
+.vm-vacio.on { display: block; }
+.vm-leyenda-extra { font-size: 11px; color: var(--vm-sub); margin-top: 4px; }
+
+/* ---- Modales y aviso ---- */
+.vm-modal { position: fixed; inset: 0; background: rgba(15,23,42,.5); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 16px; }
+.vm-modal.on { display: flex; }
+.vm-modal-box { background: #fff; border-radius: 14px; padding: 20px; width: 100%; max-width: 380px; box-shadow: 0 12px 40px rgba(0,0,0,.3); }
+.vm-modal-box h3 { margin: 0 0 12px; font-size: 17px; color: var(--vm-azul); }
+.vm-campo { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; font-size: 13px; font-weight: 600; }
+.vm-campo select, .vm-campo input { padding: 9px 10px; border: 1.5px solid var(--vm-borde); border-radius: 8px; font-size: 14px; }
+.vm-fila-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 6px; }
+.vm-error { color: #b91c1c; background: #fee2e2; padding: 8px 10px; border-radius: 8px; font-size: 13px; margin-bottom: 10px; display: none; }
+.vm-error.on { display: block; }
+.vm-toast { position: fixed; left: 50%; bottom: 88px; transform: translateX(-50%); background: var(--vm-azul); color: #fff; padding: 10px 16px;
+            border-radius: 999px; font-size: 13px; z-index: 3000; opacity: 0; pointer-events: none; transition: opacity .25s; max-width: 90vw; text-align: center; }
+.vm-toast.on { opacity: 1; }
+
+/* ---- Páginas: checkout / recibos / reservas ---- */
+.vm-pagina { font-family: 'Inter', system-ui, sans-serif; background: #f8fafc; min-height: 100vh; display: flex; justify-content: center; padding: 32px 16px; box-sizing: border-box; margin: 0; }
+.vm-pagina * { box-sizing: border-box; }
+.vm-card { background: #fff; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,.06); padding: 26px; width: 100%; max-width: 760px; height: fit-content; }
+.vm-card.estrecha { max-width: 460px; }
+.vm-card h1 { margin: 0 0 4px; font-size: 22px; color: var(--vm-azul); }
+.vm-card h2 { font-size: 16px; margin: 24px 0 8px; color: var(--vm-azul); }
+.vm-aviso { padding: 10px 12px; border-radius: 8px; font-size: 13px; margin: 12px 0; }
+.vm-aviso.info { background: #dbeafe; color: #1e3a8a; } .vm-aviso.ok { background: #dcfce7; color: #15803d; } .vm-aviso.err { background: #fee2e2; color: #b91c1c; }
+.vm-tabla { width: 100%; border-collapse: collapse; font-size: 13px; }
+.vm-tabla th, .vm-tabla td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #e2e8f0; }
+.vm-tabla th { color: var(--vm-sub); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; }
+.vm-tabla td.num, .vm-tabla th.num { text-align: right; }
+.vm-scroll { overflow-x: auto; }
+.vm-resumen { margin: 14px 0; } .vm-resumen div { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; border-bottom: 1px dashed #e2e8f0; }
+.vm-resumen .total { font-size: 18px; font-weight: 800; color: var(--vm-azul); border-bottom: 0; }
+.vm-resumen .sub { color: var(--vm-sub); font-size: 12px; }
+.vm-estado { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.vm-estado.en_curso, .vm-estado.pendiente { background: #fef08a; color: #854d0e; } .vm-estado.finalizada { background: #dcfce7; color: #15803d; } .vm-estado.cancelada { background: #fee2e2; color: #b91c1c; }
+.vm-enlace { display: inline-block; margin-top: 18px; color: var(--vm-azul2); text-decoration: none; font-size: 14px; margin-right: 14px; }
+.vm-total-linea { margin-top: 10px; font-weight: 700; text-align: right; font-size: 14px; }
+.vm-btn.grande { width: 100%; padding: 11px; font-size: 15px; margin-top: 4px; }

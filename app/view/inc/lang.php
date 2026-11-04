@@ -10,8 +10,14 @@ if (isset($_GET['lang'])) {
     }
 }
 
-// Idioma por defecto: español si no está definido
+// el idioma por defecto es español si no hay sesión
 $idioma_actual = $_SESSION['lang'] ?? 'es';
 
 // Cargar el archivo correspondiente
 require_once __DIR__ . "/../../lang/{$idioma_actual}.php";
+
+// Textos nuevos (checkout, reportes, filtros, recibos). Si el archivo no existe no pasa nada.
+$archivoExtra = __DIR__ . "/../../lang/{$idioma_actual}_extra.php";
+if (file_exists($archivoExtra)) {
+    $lang = array_merge($lang, require $archivoExtra);
+}

@@ -1,6 +1,6 @@
 <?php
     require_once __DIR__ . "/../../view/inc/auth2.php";
-    require_once __DIR__ . "/../../view/inc/lang.php"; // <--- Incluir el gestor de idiomas
+    require_once __DIR__ . "/../../view/inc/lang.php"; 
     /** @var array $lang */
 ?>
 <!DOCTYPE html>
@@ -9,9 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - VoltMap</title>
-    <link rel="stylesheet" href="../../view/css/estilosLogin.css">
-    <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
-</head>
+    <link rel="stylesheet" href="../../view/css/estilosLogin.css"></head>
 <body>
     <div class="sc on" id="s-login" style="align-items:center;justify-content:center;background:var(--fondo)">
         <div class="login-card">

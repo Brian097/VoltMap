@@ -17,7 +17,7 @@
     <div class="sc on" id="s-perfil">
         <div class="perfil-container">
             
-            <!-- Botón de Volver al Mapa -->
+            
             <div style="margin-bottom: 15px;">
                 <a href="mapa.php" class="btn-volver">
                     ← <?php echo $lang['volver_mapa'] ?? 'Volver al Mapa'; ?>
@@ -29,7 +29,7 @@
                 <p><?php echo $lang['sub_perfil'] ?? 'Administra tu información personal y credenciales'; ?></p>
             </div>
 
-            <!-- Incluir el controlador que procesa la actualización y define las alertas -->
+            
             <?php include_once __DIR__ . '/../../controller/controlador_perfil.php'; ?>
 
             <?php if (!empty($mensaje)): ?>
@@ -41,7 +41,7 @@
 
             <div class="perfil-grid">
                 
-                <!-- Formulario de edición -->
+                
                 <div class="perfil-card">
                     <form method="POST" action="">
                         <div class="perfil-section-title">
@@ -95,7 +95,6 @@
                     </form>
                 </div>
 
-                <!-- Tarjeta lateral de resumen de cuenta -->
                 <div class="perfil-sidebar">
                     <div class="perfil-avatar">
                         <?php echo strtoupper(substr($datosUsuario['nombre'] ?? 'U', 0, 2)); ?>

@@ -1,6 +1,6 @@
-/* ==========================================================================
-   LÓGICA MAPA - EDITAR CARGADOR (Leaflet)
-   ========================================================================== */
+
+//   LÓGICA MAPA - EDITAR CARGADOR (Leaflet)
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const inputLat = document.getElementById('latitud');

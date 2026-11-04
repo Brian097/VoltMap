@@ -29,11 +29,12 @@ h2 {
     font-size: 1.2rem;
 }
 
-.form-card, .list-card {
+.form-card,
+.list-card {
     background: #ffffff;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     margin-bottom: 2rem;
 }
 
@@ -53,7 +54,8 @@ label {
     color: #4a5568;
 }
 
-input[type="text"], select {
+input[type="text"],
+select {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #cbd5e0;
@@ -62,7 +64,8 @@ input[type="text"], select {
     transition: border-color 0.3s;
 }
 
-input[type="text"]:focus, select:focus {
+input[type="text"]:focus,
+select:focus {
     outline: none;
     border-color: #3182ce;
 }
@@ -151,7 +154,9 @@ input[type="text"]:focus, select:focus {
 
 
 @media (max-width: 600px) {
-    .form-card, .list-card {
+
+    .form-card,
+    .list-card {
         padding: 1.5rem;
     }
 }

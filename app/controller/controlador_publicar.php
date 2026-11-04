@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnpublicar'])) {
             $estadoOperativo = "Operativo";
 
             $stmtCargador = $conexion->prepare("INSERT INTO cargadores (id, idPuntoCarga, potenciaKilowatts, tipoConector, tipoCargador, estadoUso, estadoOperativo, precioKwh, precioHora) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmtCargador->bind_param("sisdsssdd", $cId, $idPuntoCarga, $potencia, $tipoConector, $tipoCargador, $estadoUso, $estadoOperativo, $precioKwh, $precioHora);
+            $stmtCargador->bind_param("sidssssdd", $cId, $idPuntoCarga, $potencia, $tipoConector, $tipoCargador, $estadoUso, $estadoOperativo, $precioKwh, $precioHora);
             $stmtCargador->execute();
             $stmtCargador->close();
 

@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="./../css/estilosMapa.css" />
     <link rel="stylesheet" href="./../css/estilosInvitados.css" />
+    <link rel="stylesheet" href="./../css/entrega3.css" />
       <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
 
 </head>
@@ -48,6 +49,10 @@
 
     <!-- Scripts necesarios -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        window.VM_T = <?php echo json_encode(array_filter($lang, fn($k) => str_starts_with($k, 'vm_'), ARRAY_FILTER_USE_KEY), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE); ?>;
+        window.VM_USER = null; // invitado: puede mirar el mapa pero no reportar ni reservar
+    </script>
     <script src="../../view/js/mapaCargadores.js"></script>
     <script>
         function cambiarIdioma(nuevoLang) {

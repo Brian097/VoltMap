@@ -16,7 +16,7 @@ if (!empty($_POST["btningresar"])) {
         $usuario  = trim($_POST["usuario"]); // Puede ser correo, cédula o RUT
         $password = trim($_POST["password"]);
 
-        // Corregido: se usa 'cedula_identidad' en lugar de 'cedula' y seleccionamos todos los campos
+        // se cambio la consulta para que busque por correo, cédula o RUT
         $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE correo = ? OR cedula_identidad = ? OR rut = ?");
         $stmt->bind_param("sss", $usuario, $usuario, $usuario);
         $stmt->execute();
@@ -25,7 +25,7 @@ if (!empty($_POST["btningresar"])) {
         if ($datos = $resultado->fetch_assoc()) {
             if (password_verify($password, $datos['password'])) {
                 
-                // Instanciar la clase correcta según el rol del usuario (Programación Orientada a Objetos)
+            // Crear el objeto de usuario correspondiente según el tipo
                 $usuarioObj = null;
                 switch ($datos['tipo_usuario']) {
                     case 'particular':
@@ -64,7 +64,7 @@ if (!empty($_POST["btningresar"])) {
                 $_SESSION["correo"] = $datos['correo'];
                 $_SESSION["tipo_usuario"] = $datos['tipo_usuario'];
                 
-                // Opcional: Si quieres guardar el objeto completo en la sesión
+                // Opcional: Si se quisiera guardar el objeto completo en la sesión, se podría hacer así:
                 // $_SESSION["usuario_obj"] = $usuarioObj;
 
                 echo '<script>window.location.href = "/app/view/content/mapa.php";</script>';

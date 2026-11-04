@@ -32,10 +32,9 @@ async function sincronizarDatos() {
 
         estadoTxt.textContent = "¡Sincronización exitosa!";
         estadoTxt.style.color = "var(--verde)";
-        
-        // Opcional: Recargar el mapa o la página después de un momento para ver los cambios
+
         setTimeout(() => {
-            location.reload(); 
+            location.reload();
         }, 1500);
 
     } catch (error) {

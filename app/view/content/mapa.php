@@ -1,13 +1,25 @@
 <?php
-    // 1. Cargamos la configuración global
+    // 1. se carga la configuración y variables de entorno
     require_once __DIR__ . '/../../../config/config.php';
     
-    // 2. Verificamos la autenticación
+    // 2. se inicia la sesión y se valida que el usuario esté logueado
     require_once __DIR__ . "/../../view/inc/auth.php";
 
-    // 3. Incluimos el sistema de idiomas
+    // 3. se cargan los textos de idioma (ES/EN) y se determina el idioma actual
     require_once __DIR__ . "/../../view/inc/lang.php";
     /** @var array $lang */
+
+    // 4. Datos para el mapa interactivo (vehículos del usuario, token CSRF y textos ES/EN para el JavaScript)
+    require_once __DIR__ . '/../../controller/helpers.php';
+    require_once __DIR__ . '/../../model/conexion.php';
+    $vmVehiculos = [];
+    $stVeh = $conexion->prepare("SELECT id, marca_modelo, capacidad_kwh, potencia_max_kw FROM vehiculos WHERE usuario_id = ? ORDER BY id DESC");
+    $stVeh->bind_param('i', $_SESSION['id']);
+    $stVeh->execute();
+    $vmVehiculos = $stVeh->get_result()->fetch_all(MYSQLI_ASSOC);
+    $stVeh->close();
+    $vmT = array_filter($lang, fn($k) => str_starts_with($k, 'vm_'), ARRAY_FILTER_USE_KEY);
+    $vmFlags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +32,7 @@
 
   <!-- Hojas de estilo de la app y Leaflet -->
   <link rel="stylesheet" href="../../view/css/estilosMapa.css">
+  <link rel="stylesheet" href="../../view/css/entrega3.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="icon" type="image/x-icon" href="/app/view/img/VoltMap-ICO.ico">
 </head>
@@ -57,11 +70,11 @@
 
     <!-- Barra de filtros rápidos -->
     <div class="filtros-bar">
-      <button class="chip sel" onclick="selChip(this)"><?php echo $lang['chip_todos'] ?? 'Todos'; ?></button>
-      <button class="chip" onclick="selChip(this)"><span class="dot dot-v" style="margin-right:5px"></span><?php echo $lang['chip_disponible'] ?? 'Disponible'; ?></button>
-      <button class="chip" onclick="selChip(this)"><span class="dot dot-a" style="margin-right:5px"></span><?php echo $lang['chip_en_uso'] ?? 'En uso'; ?></button>
-      <button class="chip" onclick="selChip(this)"><span class="dot dot-r" style="margin-right:5px"></span><?php echo $lang['chip_fuera_servicio'] ?? 'Fuera de servicio'; ?></button>
-      <button class="chip" onclick="selChip(this)"><?php echo $lang['chip_mas_filtros'] ?? 'Más filtros'; ?></button>
+      <button class="chip sel" data-vm-estado="todos"><?php echo $lang['chip_todos'] ?? 'Todos'; ?></button>
+      <button class="chip" data-vm-estado="disponible"><span class="dot dot-v" style="margin-right:5px"></span><?php echo $lang['chip_disponible'] ?? 'Disponible'; ?></button>
+      <button class="chip" data-vm-estado="en_uso"><span class="dot dot-a" style="margin-right:5px"></span><?php echo $lang['chip_en_uso'] ?? 'En uso'; ?></button>
+      <button class="chip" data-vm-estado="fuera"><span class="dot dot-r" style="margin-right:5px"></span><?php echo $lang['chip_fuera_servicio'] ?? 'Fuera de servicio'; ?></button>
+      <button class="chip" data-vm-mas><?php echo $lang['chip_mas_filtros'] ?? 'Más filtros'; ?></button>
     </div>
 
     <!-- Contenedor del mapa -->
@@ -74,6 +87,7 @@
         <div class="leg-row"><span class="dot dot-v"></span> <?php echo $lang['chip_disponible'] ?? 'Disponible'; ?></div>
         <div class="leg-row"><span class="dot dot-a"></span> <?php echo $lang['chip_en_uso'] ?? 'En uso'; ?></div>
         <div class="leg-row"><span class="dot dot-r"></span> <?php echo $lang['chip_fuera_servicio'] ?? 'Fuera de servicio'; ?></div>
+        <div class="vm-leyenda-extra"><?php echo $lang['vm_ley_privado'] ?? 'Borde azul = privado'; ?></div>
       </div>
     </div>
 
@@ -128,7 +142,15 @@
   <!-- Librería de Leaflet -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Lógica para obtener los datos de TU base de datos (mediante api_puntos.php) -->
+  <!-- Datos de la sesión para el mapa (textos ES/EN, vehículos del usuario y token CSRF) -->
+  <script>
+    window.VM_T = <?php echo json_encode($vmT, $vmFlags); ?>;
+    window.VM_USER = <?php echo json_encode(['id' => (int)$_SESSION['id'], 'tipo' => $_SESSION['tipo_usuario'] ?? ''], $vmFlags); ?>;
+    window.VM_VEHICULOS = <?php echo json_encode($vmVehiculos, $vmFlags); ?>;
+    window.VM_CSRF = <?php echo json_encode(vm_csrf()); ?>;
+  </script>
+
+  <!-- Lógica del mapa: filtros, reportes en tiempo real e inicio de carga (usa api_puntos.php) -->
   <script src="../../view/js/mapaCargadores.js"></script>
 
   <!-- Interacción general de la interfaz (chips, menú, etc.) -->

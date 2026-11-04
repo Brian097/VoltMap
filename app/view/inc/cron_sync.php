@@ -11,6 +11,7 @@ if ($resultado) {
     echo "[" . date('Y-m-d H:i:s') . "] Sincronización exitosa con OCM.\n";
 } else {
     echo "[" . date('Y-m-d H:i:s') . "] Error al sincronizar con OCM.\n";
+    echo "Motivo: " . htmlspecialchars($GLOBALS['ocm_sync_error'] ?: 'desconocido (revisar error_log de PHP)') . "\n";
 }
 
 ?>

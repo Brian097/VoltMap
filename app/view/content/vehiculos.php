@@ -1,21 +1,25 @@
 <?php
 
+require_once __DIR__ . "/../../view/inc/auth.php";
+require_once __DIR__ . "/../../view/inc/lang.php";
 require_once __DIR__ . "/../../model/conexion.php"; 
 
-$usuario_id = $_SESSION['usuario_id'] ?? 1; 
+$usuario_id = (int)$_SESSION['id'];
 
-// logica para base de datos agregar vehiculo
+// la logica para agregar los vehículo eléctrico
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_vehiculo'])) {
     $marca_modelo = htmlspecialchars($_POST['marca_modelo']);
     $puerto_carga = htmlspecialchars($_POST['puerto_carga']);
+    $capacidad = (float)str_replace(',', '.', $_POST['capacidad_kwh'] ?? 0);
+    $potencia_max = (float)str_replace(',', '.', $_POST['potencia_max_kw'] ?? 0);
     
-    if (!empty($marca_modelo) && !empty($puerto_carga)) {
+    if (!empty($marca_modelo) && !empty($puerto_carga) && $capacidad > 0 && $potencia_max > 0) {
         
-        $sqlInsert = "INSERT INTO vehiculos (usuario_id, marca_modelo, puerto_carga) VALUES (?, ?, ?)";
+        $sqlInsert = "INSERT INTO vehiculos (usuario_id, marca_modelo, puerto_carga, capacidad_kwh, potencia_max_kw) VALUES (?, ?, ?, ?, ?)";
         $stmtInsert = $conexion->prepare($sqlInsert);
         
         if ($stmtInsert) {
-            $stmtInsert->bind_param("iss", $usuario_id, $marca_modelo, $puerto_carga);
+            $stmtInsert->bind_param("issdd", $usuario_id, $marca_modelo, $puerto_carga, $capacidad, $potencia_max);
             if ($stmtInsert->execute()) {
                 $mensaje = "Vehículo agregado con éxito.";
             } else {
@@ -31,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agregar_vehiculo'])) 
 }
 
 $vehiculos = [];
-$sqlSelect = "SELECT id, marca_modelo, puerto_carga FROM vehiculos WHERE usuario_id = ? ORDER BY id DESC";
+$sqlSelect = "SELECT id, marca_modelo, puerto_carga, capacidad_kwh, potencia_max_kw FROM vehiculos WHERE usuario_id = ? ORDER BY id DESC";
 $stmtSelect = $conexion->prepare($sqlSelect);
 
 if ($stmtSelect) {
@@ -88,6 +92,15 @@ if ($stmtSelect) {
                     </select>
                 </div>
                 
+                <div class="form-group">
+                    <label for="capacidad_kwh"><?php echo $lang['vm_capacidad_kwh'] ?? 'Capacidad de la batería (kWh)'; ?>:</label>
+                    <input type="number" id="capacidad_kwh" name="capacidad_kwh" min="1" max="250" step="0.1" placeholder="Ej. 40" required>
+                </div>
+                <div class="form-group">
+                    <label for="potencia_max_kw"><?php echo $lang['vm_potencia_max_kw'] ?? 'Potencia máxima de carga (kW)'; ?>:</label>
+                    <input type="number" id="potencia_max_kw" name="potencia_max_kw" min="1" max="400" step="0.1" placeholder="Ej. 50" required>
+                </div>
+                
                 <button type="submit" name="agregar_vehiculo" class="btn-submit">Agregar Vehículo</button>
             </form>
         </div>
@@ -102,7 +115,7 @@ if ($stmtSelect) {
                         <li>
                             <div class="vehiculo-info">
                                 <strong><?php echo htmlspecialchars($vehiculo['marca_modelo']); ?></strong>
-                                <span>Puerto: <?php echo htmlspecialchars($vehiculo['puerto_carga']); ?></span>
+                                <span>Puerto: <?php echo htmlspecialchars($vehiculo['puerto_carga']); ?> · <?php echo (float)$vehiculo['capacidad_kwh']; ?> kWh · <?php echo (float)$vehiculo['potencia_max_kw']; ?> kW</span>
                             </div>
                         </li>
                     <?php endforeach; ?>
